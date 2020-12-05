@@ -1,0 +1,26 @@
+<div class='px-3 link-container <%= @navigation_name == "Merchant" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#merchants'
+    aria-expanded='true'
+    aria-controls='merchants'
+  >
+  <i class="fas fa-store mr-3 icon"></i>
+    Merchants
+  </a>
+  <div
+    id='merchants'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/merchants" class='d-block pl-2 pb-3'>
+    All
+  </a>
+  <a href="/merchants/new" class='d-block pl-2 pb-3'>
+    New
+  </a>
+  </div>
+</div>

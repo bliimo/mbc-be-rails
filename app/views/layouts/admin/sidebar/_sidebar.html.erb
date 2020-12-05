@@ -1,0 +1,24 @@
+<div id="sidebar" class="sidebar">
+  <div class="logo mt-5">
+    <img src="/images/logo-long.png">
+  </div>
+  <div class='accordion mt-3' id='accordion'>
+    <%= render 'layouts/admin/links/dashboard_link' %>
+    <%= render 'layouts/admin/links/product_link' %>
+    <%= render 'layouts/admin/links/buyer_link' %>
+    <%= render 'layouts/admin/links/playmates_link' %>
+    <%= render 'layouts/admin/links/streaming_rooms_link' %>
+    <%= render 'layouts/admin/links/exclusive_contents' %>
+    <%= render 'layouts/admin/links/transactions_list' %>
+    <%= render 'layouts/admin/links/in_app_currency_link' %>
+    <%= render 'layouts/admin/links/user_link' %>
+    <%= render 'layouts/admin/links/profile_link' %>
+    <hr/>
+    <div class='px-3 link-container '>
+      <%= link_to(destroy_user_session_path, method: :delete, class: 'w-100 d-flex align-items-center text-align-left py-2', data: { confirm: 'Are you sure?' } ) do %>
+        <i class="fas fa-sign-out-alt mr-3 icon"></i>
+        Signout
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Thanks for signing up, <%= @user.name %>!</h1>
+    <p>Welcome to Playboy!</p>
+    <br/>
+    <a 
+      href="<%= @confirmation_url %>"
+      <%# style="background-color: yellow; margin-top: 16px; margin-bottom: 16px; padding: 24px 15px; text-decoration: none; color: blue; font-size: 20px; font-family: Arial" %>
+    >CONFIRM YOUR ACCOUNT</a>
+    <br/>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+<div class='px-3 link-container <%= @navigation_name == "Product" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#product'
+    aria-expanded='true'
+    aria-controls='product'
+  >
+  <i class="fas fa-boxes mr-3 icon"></i>
+    Products
+  </a>
+  <div
+    id='product'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/products" class='d-block pl-2 pb-3'>
+    All
+  </a>
+  <a href="/tags" class='d-block pl-2 pb-3'>
+    Tags
+  </a>
+  <a href="/categories" class='d-block pl-2 pb-3'>
+    Categories
+  </a>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+@import "constants";
+
+.login-page{
+  min-height: 100vh;
+  // background-image: linear-gradient($white, #F4F4FC, $primary_color);
+  background-color: rgb(29, 29, 29);
+
+  label{
+    color: white
+  }
+
+  .heading-container{
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    p{
+      color: $white;
+    }
+    h1{
+      color: $primary_color;
+      font-size: 52px;
+      font-weight: bold;
+    }
+
+  }
+  
+  .login-container{
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+
+    .logo{
+      // width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      display: block;
+
+    }
+  }
+
+  .login-footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0
+  }
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Playboy Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="icon" href="/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/f1752edda4.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <%= render 'layouts/admin/sidebar/sidebar' %>
+      <div class="content">
+        <%= render 'layouts/admin/navbar/navbar' %>
+        <%= render 'components/alerts/alert' %>
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+  <% if Rails.env.development? %>
+    <%= console %>
+  <% end %>
+</html>

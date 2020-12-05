@@ -1,0 +1,26 @@
+<div class='px-3 link-container <%= @navigation_name == "User" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#user'
+    aria-expanded='true'
+    aria-controls='user'
+  >
+  <i class="fas fa-users-cog mr-3 icon"></i>
+    Admins
+  </a>
+  <div
+    id='user'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/user" class='d-block pl-2 pb-3'>
+    All
+  </a>
+  <a href="/user/new" class='d-block pl-2 pb-3'>
+    New
+  </a>
+  </div>
+</div>

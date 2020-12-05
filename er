@@ -1,0 +1,24 @@
+
+[1mFrom:[0m /home/laurence/projects/playboy/playboy-backend/app/controllers/api/v1/auth_controller.rb @ line 217 Api::V1::AuthController#change_password:
+
+    [1;34m214[0m: [32mdef[0m [1;34mchange_password[0m
+    [1;34m215[0m:   user = [1;34;4mUser[0m.find_by([35mverification_code[0m: params[[33m:verification_code[0m])
+    [1;34m216[0m: 
+ => [1;34m217[0m:   binding.pry
+    [1;34m218[0m: 
+    [1;34m219[0m:   [32mif[0m user.present?
+    [1;34m220[0m:     [32mif[0m user.code_expired?
+    [1;34m221[0m:       render [35mjson[0m: { [35mmessage[0m: [31m[1;31m'[0m[31mcode expired[1;31m'[0m[31m[0m }, [35mstatus[0m: [33m:unprocessable_entity[0m
+    [1;34m222[0m:     [32melse[0m
+    [1;34m223[0m:       user.password = params[[33m:password[0m]
+    [1;34m224[0m:       [32mif[0m user.save
+    [1;34m225[0m:         render [35mjson[0m: user, [35mstatus[0m: [33m:ok[0m
+    [1;34m226[0m:       [32melse[0m
+    [1;34m227[0m:         render [35mjson[0m: user.errors.full_messages, [35mstatus[0m: [33m:unprocessable_entity[0m
+    [1;34m228[0m:       [32mend[0m
+    [1;34m229[0m:     [32mend[0m
+    [1;34m230[0m:   [32melse[0m
+    [1;34m231[0m:     render [35mjson[0m: { [35mmessage[0m: [31m[1;31m'[0m[31mCode not valid[1;31m'[0m[31m[0m }, [35mstatus[0m: [33m:unprocessable_entity[0m
+    [1;34m232[0m:   [32mend[0m
+    [1;34m233[0m: [32mend[0m
+

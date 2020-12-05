@@ -1,0 +1,26 @@
+<div class='px-3 link-container <%= @navigation_name == "Exclusive Content" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#exclusive_content'
+    aria-expanded='true'
+    aria-controls='exclusive_content'
+  >
+  <i class="fas fa-photo-video mr-3 icon"></i>
+    Exclusive Content
+  </a>
+  <div
+    id='exclusive_content'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/exclusive_contents" class='d-block pl-2 pb-3'>
+    All
+  </a>
+  <a href="/exclusive_contents/new" class='d-block pl-2 pb-3'>
+    New
+  </a>
+  </div>
+</div>

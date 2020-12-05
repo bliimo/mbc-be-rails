@@ -1,0 +1,32 @@
+<div class='px-3 link-container <%= @navigation_name == "In App Currency" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#in_app_currency'
+    aria-expanded='true'
+    aria-controls='in_app_currency'
+  >
+  <i class="fas fa-coins mr-3 icon"></i>
+    In App Currency
+  </a>
+  <div
+    id='in_app_currency'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/in_app_currency_transactions" class='d-block pl-2 pb-3'>
+    Transactions
+  </a>
+  <a href="/in_app_stores" class='d-block pl-2 pb-3'>
+    Store
+  </a>
+  <a href="/gifts" class='d-block pl-2 pb-3'>
+    Gifts
+  </a>
+  <a href="/gifted_items" class='d-block pl-2 pb-3'>
+    Sent Gifts
+  </a>
+  </div>
+</div>

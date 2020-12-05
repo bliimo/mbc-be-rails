@@ -1,0 +1,25 @@
+<div class="navbar-container">
+  <div class="custom-navbar">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-reset btn-sm" id="nav-btn"><i class="fas fa-chevron-left text-white"></i></button>
+      <h5 class="my-0 ml-3 text-white"><%= controller_name.titleize %></h5>
+    </div>
+    <div class="d-flex align-items-center">
+      <h5 class="my-0 mr-3 text-white"><%= current_user.name %></h5>
+      <% if current_user.image.attached? %>
+        <%= image_tag current_user.image, class: 'nav-logo' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  const handleNavbarBtn = () => {
+    const navbarBtn = document.querySelector("#nav-btn")
+    navbarBtn.addEventListener("click", () => {
+      const sidebar = document.querySelector("#sidebar")
+      sidebar.classList.toggle("sidebar-hidden")
+    })
+  }
+  document.addEventListener("turbolinks:load", handleNavbarBtn);
+</script>

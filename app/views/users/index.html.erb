@@ -1,0 +1,25 @@
+<%= render 'components/containers/crud_container' do %>
+  <h1>Users</h1>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= link_to user.email, user, class: 'text-reset d-block text-decoration-none' %></td>
+          <td><%= link_to user.name, user, class: 'text-reset d-block text-decoration-none' %></td>
+          <td><%= link_to user.role, user, class: 'text-reset d-block text-decoration-none' %></td>
+          <td><%= link_to render_status(user.status), user, class: 'text-reset d-block text-decoration-none' %></td>
+         </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <hr>
+  <%= link_to 'New User', new_user_path, class: 'btn btn-primary' %>
+<% end %>

@@ -1,0 +1,26 @@
+<div class='px-3 link-container <%= @navigation_name == "Profile" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#profile'
+    aria-expanded='true'
+    aria-controls='profile'
+  >
+  <i class="fas fa-user-alt mr-3 icon"></i>
+    Profile
+  </a>
+  <div
+    id='profile'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/profile" class='d-block pl-2 pb-3'>
+    Profile
+  </a>
+  <a href="/profile/change_password" class='d-block pl-2 pb-3'>
+    Password
+  </a>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+
+<% if resource.out_of_range? %>
+  <span class="my-3 d-block">
+    Out of range
+  </span>
+<% else %>
+  <% min = (resource.current_page - 1) * resource.limit_value.to_i + 1 %>
+  <% max = resource.current_page * resource.limit_value.to_i %>
+  <% max = count if resource.last_page? %>
+  <span class="mt-3 d-block">
+    Page <%= resource.current_page %> of <%= resource.total_pages %> pages 
+  </span>
+  <span class="mb-3 d-block">
+    Showing 
+    <%= min %> to 
+    <%= max %> of 
+    <%= count %> results
+  </span>
+<% end %>

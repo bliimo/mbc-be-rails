@@ -1,0 +1,26 @@
+<div class='px-3 link-container <%= @navigation_name == "Dashboard" ? 'active' : '' %>'>
+  <a
+    class='w-100 d-flex align-items-center text-align-left py-2'
+    href='#'
+    data-toggle='collapse'
+    data-target='#dashboard'
+    aria-expanded='true'
+    aria-controls='dashboard'
+  >
+  <i class="fas fa-tachometer-alt mr-3 icon"></i>
+    Dashboard
+  </a>
+  <div
+    id='dashboard'
+    class='collapse px-5'
+    aria-labelledby='headingOne'
+    data-parent='#accordion'
+  >
+  <a href="/" class='d-block pl-2 pb-3'>
+    Overview
+  </a>
+  <a href="#" class='d-block pl-2 pb-3'>
+    Notification
+  </a>
+  </div>
+</div>

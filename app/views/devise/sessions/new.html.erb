@@ -1,0 +1,51 @@
+<div class="container-fluid login-page position-relative pt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 d-none d-md-block py-5 px-2 px-md-5">
+        <div class="heading-container">
+          <h1>Playboy Admin</h1>
+          <p class="mt-5">Proident veniam tempor mollit esse nostrud eiusmod quis velit aute nulla deserunt excepteur nisi velit. Nulla consectetur commodo et id magna velit culpa amet commodo consequat qui. Minim veniam velit nisi est. Aute culpa aliqua eu dolore ea ex commodo cillum incididunt. Enim ut culpa nisi veniam ipsum ea occaecat consequat aute et. Id commodo non exercitation velit consectetur ea laborum sint consectetur commodo laboris magna. Laboris ipsum aute et est veniam amet.</p>
+        </div>
+      </div>
+      <div class="col-md-6 py-5 px-2 px-md-5">
+        <div class="login-container px-4 py-5 bg-dark rounded shadow">
+          <img src="/images/logo-long.png" class="logo"/>
+          <h4 class="text-center mt-3 text-white">Log in</h4><hr/>
+          
+          <% if alert.present? %>
+            <p class="text-danger"><%= alert %></p>
+          <% end %>
+          
+          <% if notice.present? %>
+            <p class="text-success"><%= notice %></p>
+          <% end %>
+          
+          <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="form-inputs">
+              <%= f.input :email,
+                          required: false,
+                          autofocus: true,
+                          input_html: { autocomplete: "email" } %>
+              <%= f.input :password,
+                          required: false,
+                          input_html: { autocomplete: "current-password" } %>
+              <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+            </div>
+            <div class="form-actions">
+              <%= f.button :submit, "Log in", class: 'btn btn-primary rounded-pill px-5 d-block mx-auto' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-md-6 d-block d-md-none py-5 px-2 px-md-5">
+        <div class="heading-container">
+          <h1>Everything you need in just one click! </h1>
+          <p class="mt-5">Proident veniam tempor mollit esse nostrud eiusmod quis velit aute nulla deserunt excepteur nisi velit. Nulla consectetur commodo et id magna velit culpa amet commodo consequat qui. Minim veniam velit nisi est. Aute culpa aliqua eu dolore ea ex commodo cillum incididunt. Enim ut culpa nisi veniam ipsum ea occaecat consequat aute et. Id commodo non exercitation velit consectetur ea laborum sint consectetur commodo laboris magna. Laboris ipsum aute et est veniam amet.</p>
+        </div>
+      </div>
+    </div>
+    <div class="login-footer">
+      <p class="text-center text-white">© 2020, Chaching</p>
+    </div>
+  </div>
+</div>
