@@ -1,11 +1,9 @@
 class Api::V1::AuthController < Api::V1::ApiController
   def connection_test
-    ChatChannel.broadcast_to(
-      StreamingRoom.find(params[:id]),
-      { sent_by: params[:name],
-        body: params[:body] }
+    GameChannel.broadcast_to(
+      "1",
+      { message: "itsworking" }
     )
-
     render json: { message: 'yep its working' }, status: :ok
   end
 
