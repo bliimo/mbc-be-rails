@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :players
+  resources :game_records
   mount ActionCable.server => '/cable'
 
   resources :messages
@@ -69,50 +71,10 @@ Rails.application.routes.draw do
       post 'auth/resend_forgot_password_code'
       get 'auth/profile'
 
-          resources :products do
-        collection do
-          get :categories
-        end
-      end
-      resources :streaming_rooms do
-        collection do
-          get :private_rooms
-        end
-        member do
-          post :buy_private_room
-        end
-      end
-      resources :carts, only: %i[index create destroy]
-      resources :tags, only: [:index]
-      get 'merchant_product/products'
-      get 'merchant_product/categories'
-      post 'merchant_product/add_category'
-      post 'merchant_product/add_product'
-      post 'orders/checkout'
-      get 'orders/index'
-      get 'orders/:id' => 'orders#show'
-      patch 'merchant/update_shop'
-      post 'merchant/upload_banner'
+      post 'game/create_game'
+      get 'game/join_game'
+      post 'game/spin_game'
 
-      get 'playmates/index'
-      get 'playmates/:id' => 'playmates#show'
-
-      get 'conversations/get_conversation/:user_id' => 'conversations#get_conversation'
-      post 'conversations/create_chat/:conversation_id' => 'conversations#create_chat'
-      get 'conversations/get_messages/:conversation_id' => 'conversations#get_messages'
-      get 'conversations/get_all_conversations'
-
-      get 'in_app_stores/index'
-
-      get 'in_app_currency_transactions/index'
-      post 'in_app_currency_transactions/create'
-
-      get 'gifts/index'
-      post 'gifts/send_gift'
-
-      get 'exclusive_contents' => 'exclusive_contents#index'
-      get 'exclusive_contents/:id' => 'exclusive_contents#show'
-      post 'exclusive_contents/:id/purchase' => 'exclusive_contents#purchase'
     end
   end
 end

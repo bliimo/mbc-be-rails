@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Game:</strong>
+  <%= @game_record.game_id %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @game_record.start_time %>
+</p>
+
+<p>
+  <strong>Winners:</strong>
+  <%= @game_record.winners %>
+</p>
+
+<%= link_to 'Edit', edit_game_record_path(@game_record) %> |
+<%= link_to 'Back', game_records_path %>

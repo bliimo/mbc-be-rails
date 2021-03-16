@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_id: 1
+  start_time: 2021-03-15 11:51:56
+  winners: MyString
+
+two:
+  game_id: 1
+  start_time: 2021-03-15 11:51:56
+  winners: MyString
