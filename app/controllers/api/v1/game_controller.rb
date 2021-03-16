@@ -16,13 +16,12 @@ class Api::V1::GameController < Api::V1::ApiController
     else
       render json: game_record.errors, status: :unprocessable_entity
     end
-    
   end
 
   def join_game
     game_record = GameRecord.find_by_game_id(params[:game_id])
     if game_record.present?
-      render json: game_record
+      render json: game_record, methods: :remaining_time
     else
       render json: "Not found", status: 404
     end
