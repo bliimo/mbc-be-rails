@@ -84,8 +84,15 @@ class Api::V1::GameController < Api::V1::ApiController
         puts "generated index: " + random_index.to_s
       end
 
+      # create game winner
+      game_winner = GameWinner.create(game_id: game_params[:game_id])
+      # create player winner
+
       winners = indexes.map do |item|
         players[item]
+        mbc_user = MbcUser.find_by_id(players[item].user_id)
+        name = mbc_user.full_name if mbc_user.present?
+        Winner.create(user_id: players[item].user_id, game_winner_game_winner_id: game_winner.game_winner_id, full_name: name)
       end
       
       # broadcast winner
