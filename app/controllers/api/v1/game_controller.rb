@@ -89,10 +89,10 @@ class Api::V1::GameController < Api::V1::ApiController
       # create player winner
 
       winners = indexes.map do |item|
-        players[item]
         mbc_user = MbcUser.find_by_id(players[item].user_id)
         name = mbc_user.full_name if mbc_user.present?
         Winner.create(user_id: players[item].user_id, game_winner_game_winner_id: game_winner.game_winner_id, full_name: name)
+        players[item]
       end
       
       # broadcast winner

@@ -24,7 +24,7 @@ development:
 secondary:
   <<: *default
   adapter: mysql2
-  database: mbc_api
+  database: mbc_api_dev
   username: bliimodev
   password: P@$$w0RD 
   host: 199.91.69.177
