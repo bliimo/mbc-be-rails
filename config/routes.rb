@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       post 'game/create_game'
       get 'game/join_game'
       post 'game/spin_game'
+      get 'game/:id', to: 'game#show'
 
     end
   end

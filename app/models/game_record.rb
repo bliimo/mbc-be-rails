@@ -4,8 +4,14 @@ class GameRecord < ApplicationRecord
   validates :start_time, presence: true
   enum status: ["Ongoing", "Ended"]
 
+
+
   def self.lobby_time
-    10
+    15
+  end
+
+  def players
+    Player.where(game_id: game_id)
   end
 
   def remaining_time

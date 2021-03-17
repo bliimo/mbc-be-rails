@@ -18,6 +18,15 @@ class Api::V1::GameController < Api::V1::ApiController
     end
   end
 
+  def show
+    game_record = GameRecord.find_by_game_id(params[:id])
+    if game_record.present?
+      render json: game_record, methods: [:players]
+    else
+      render json: "Not found", status: 404
+    end
+  end
+
   def join_game
     game_record = GameRecord.find_by_game_id(params[:game_id])
     if game_record.present?
@@ -92,6 +101,8 @@ class Api::V1::GameController < Api::V1::ApiController
         mbc_user = MbcUser.find_by_id(players[item].user_id)
         name = mbc_user.full_name if mbc_user.present?
         Winner.create(user_id: players[item].user_id, game_winner_game_winner_id: game_winner.game_winner_id, full_name: name)
+        players[item].win_status = "Win"
+        players[item].save
         players[item]
       end
       
