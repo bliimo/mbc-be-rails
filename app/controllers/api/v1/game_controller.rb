@@ -30,7 +30,7 @@ class Api::V1::GameController < Api::V1::ApiController
   def join_game
     game_record = GameRecord.find_by_game_id(params[:game_id])
     if game_record.present?
-      render json: game_record, methods: :remaining_time
+      render json: game_record, methods: [:remaining_time, :current_time]
     else
       render json: "Not found", status: 404
     end
