@@ -1,0 +1,58 @@
+version: "3.7"
+
+services: 
+  db:
+    image: mysql:5.7
+    volumes:
+      - .tmp/db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+
+  redis:
+    image: redis:5.0.7
+    ports:
+      - '6379:6379'
+    volumes:
+      - .tmp/redis:/var/lib/redis/data
+
+  webpack:
+    build: .
+    command: ./bin/webpack-dev-server
+    volumes:
+      - ./:/app
+    ports:
+      - '3035:3035'
+    environment:
+      NODE_ENV: development
+      RAILS_ENV: development
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+
+  app: 
+    build: .
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment: 
+      DB_NAME: laurence
+    command: bash -c "bundle install && yarn install --check-files && bundle exec rails db:create db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    depends_on:
+      - db
+      - redis
+      - webpack
+    links:
+      - db
+      - redis
+      - webpack
+    environment: 
+      DB_NAME: app
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_HOST: db
+      WEBPACKER_DEV_SERVER_HOST: webpack
