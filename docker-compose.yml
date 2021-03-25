@@ -20,7 +20,7 @@ services:
 
   webpack:
     build: .
-    command: ./bin/webpack-dev-server
+    command: bash -c "bundle update && yarn install --check-files && ./bin/webpack-dev-server"
     volumes:
       - ./:/app
     ports:
@@ -37,9 +37,8 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
-    environment: 
-      DB_NAME: laurence
-    command: bash -c "yarn install --check-files && bundle exec rails db:create db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "bundle exec rails db:create db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # command: bash -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
     depends_on:
       - db
       - redis
@@ -50,6 +49,4 @@ services:
       - webpack
     env_file: 
       - .env
-    environment: 
       
-      WEBPACKER_DEV_SERVER_HOST: webpack
