@@ -36,4 +36,6 @@ yarn-debug.log*
 .yarn-integrity
 
 # Ignore temporary files
-/.tmp/*
+/.tmp
+
+.env

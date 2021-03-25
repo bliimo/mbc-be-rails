@@ -1,24 +1,10 @@
-# README
+The rails project is dockerized
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Steps to run in local machine
+Install docker
 
-Things you may want to cover:
+Commands
+docker-compose build
+docker-compose up
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To deploy

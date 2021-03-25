@@ -10,8 +10,6 @@ services:
     environment: 
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: app
-      MYSQL_USER: username
-      MYSQL_PASSWORD: password
 
   redis:
     image: redis:5.0.7
@@ -41,7 +39,7 @@ services:
       - ./:/app
     environment: 
       DB_NAME: laurence
-    command: bash -c "bundle install && yarn install --check-files && bundle exec rails db:create db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "yarn install --check-files && bundle exec rails db:create db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
     depends_on:
       - db
       - redis
@@ -50,9 +48,8 @@ services:
       - db
       - redis
       - webpack
+    env_file: 
+      - .env
     environment: 
-      DB_NAME: app
-      DB_USER: root
-      DB_PASSWORD: password
-      DB_HOST: db
+      
       WEBPACKER_DEV_SERVER_HOST: webpack
