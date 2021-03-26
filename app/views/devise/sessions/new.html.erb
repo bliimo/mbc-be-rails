@@ -10,7 +10,8 @@
       <div class="col-md-6 py-5 px-2 px-md-5">
         <div class="login-container px-4 py-5 bg-dark rounded shadow">
           <img src="/images/logo-long.png" class="logo"/>
-          <h4 class="text-center mt-3 text-white">Log in</h4><hr/>
+          <h4 class="text-center mt-3 text-white">Log in</h4>
+          <p class="text-center mt-3 text-white"><%= ENV['RAILS_ENV'] %> build</p><hr/>
           
           <% if alert.present? %>
             <p class="text-danger"><%= alert %></p>
