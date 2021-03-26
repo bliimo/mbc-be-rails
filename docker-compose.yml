@@ -6,7 +6,7 @@ services:
     volumes:
       - .tmp/db:/var/lib/mysql
     ports:
-      - "3308:3306"
+      - "3307:3306"
     environment: 
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: app
@@ -14,7 +14,7 @@ services:
   redis:
     image: redis:5.0.7
     ports:
-      - '6381:6379'
+      - '6380:6379'
     volumes:
       - .tmp/redis:/var/lib/redis/data
 
@@ -24,7 +24,7 @@ services:
     volumes:
       - ./:/app
     ports:
-      - '3036:3035'
+      - '3035:3035'
     environment:
       NODE_ENV: development
       RAILS_ENV: development
@@ -33,7 +33,7 @@ services:
   app: 
     build: .
     ports:
-      - 3001:3000
+      - 3000:3000
     working_dir: /app
     volumes:
       - ./:/app
