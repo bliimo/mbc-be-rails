@@ -39,3 +39,5 @@ yarn-debug.log*
 /.tmp
 
 .env
+
+/config/credentials.yml.enc
