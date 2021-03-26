@@ -18,8 +18,7 @@ module MbcBackend
       end
     end
     config.action_cable.allowed_request_origins = [%r{https?://\S+}]
-    config.hosts << "mbc-api-dev.bliimo.com"
-    config.hosts << "mbc-api-staging.bliimo.com"
+    config.hosts.clear
     
     config.time_zone = 'Beijing'
     # Settings in config/environments/* take precedence over those specified here.
