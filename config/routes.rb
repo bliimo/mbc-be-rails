@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notifications
   resources :players
   resources :game_records
   mount ActionCable.server => '/cable'
@@ -75,7 +76,14 @@ Rails.application.routes.draw do
       get 'game/join_game'
       post 'game/spin_game'
       get 'game/:id', to: 'game#show'
-
+      resources :notifications do
+        collection do
+          get :in_app_notifications
+        end
+        member do
+          post :read
+        end
+      end
     end
   end
 end
