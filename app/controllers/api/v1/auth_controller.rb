@@ -1,8 +1,8 @@
 class Api::V1::AuthController < Api::V1::ApiController
   def connection_test
-    GameChannel.broadcast_to(
-      "1",
-      { message: "itsworking" }
+    NotificationChannel.broadcast_to(
+      "all",
+      { message: "notification channel first broadcast" }
     )
     render json: { message: 'yep its working' }, status: :ok
   end

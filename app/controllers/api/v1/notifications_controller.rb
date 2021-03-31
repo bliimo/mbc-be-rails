@@ -45,6 +45,10 @@ class Api::V1::NotificationsController < Api::V1::ApiController
   def create
     @notification = Notification.new(notification_params)
     if @notification.save
+      NotificationChannel.broadcast_to(
+        "all",
+        { notification: @notification.as_json(methods: [:game]) }
+      )
       render json: @notification, methods: [:game]
     else
       render json: @notification.errors, status: :unprocessable_entity
