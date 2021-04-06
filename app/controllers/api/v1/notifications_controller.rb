@@ -7,10 +7,19 @@ class Api::V1::NotificationsController < Api::V1::ApiController
     @per = params[:per] || 2
 
     @notifications = Notification.all
+    @count = @notifications.count
     @notifications = @notifications.page(@page).per(@per)
     @notifications = assign_user(@notifications, @user)
 
-    render json: @notifications, methods: [:game, :is_read]
+    render json: {
+      notifications: @notifications.as_json(methods: [:game, :is_read], include: [:user]), 
+      count: @count, 
+      limit_value: @notifications.limit_value,
+      total_pages: @notifications.total_pages,
+      current_page: @notifications.current_page,
+      next_page: @notifications.next_page,
+      prev_page: @notifications.prev_page,
+    }
   end
 
   def in_app_notifications
@@ -25,7 +34,7 @@ class Api::V1::NotificationsController < Api::V1::ApiController
     @notification.current_user_id = @user.id
     render json: @notification, methods: [:game, :is_read]
   end
-
+     
   def read
     @user_notification = UserNotification.where(
       user_id: @user.id,
@@ -44,11 +53,16 @@ class Api::V1::NotificationsController < Api::V1::ApiController
 
   def create
     @notification = Notification.new(notification_params)
+    @notification.user = @user
     if @notification.save
-      NotificationChannel.broadcast_to(
-        "all",
-        { notification: @notification.as_json(methods: [:game]) }
-      )
+      if @notification.schedule > DateTime.now
+        GameSchedulerJob.set(
+          wait_until: @notification.schedule
+        ).perform_later(@notification)
+      else
+        GameSchedulerJob.perform_later(@notification)
+      end
+
       render json: @notification, methods: [:game]
     else
       render json: @notification.errors, status: :unprocessable_entity
@@ -79,6 +93,7 @@ class Api::V1::NotificationsController < Api::V1::ApiController
 
     def assign_user(notifications, user)
       notifications.each{|notification| notification.assign_attributes(current_user_id: user.id)}
+      notifications
     end
 
     def filter_unread_notifications(notifications)
