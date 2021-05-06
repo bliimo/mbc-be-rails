@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  build_code: 1
+  android_update_type: 1
+  ios_update_type: 1
+  android_number_of_installs: 1
+  ios_number_of_installs: 1
+  maintenance_mode: false
+
+two:
+  build_code: 1
+  android_update_type: 1
+  ios_update_type: 1
+  android_number_of_installs: 1
+  ios_number_of_installs: 1
+  maintenance_mode: false

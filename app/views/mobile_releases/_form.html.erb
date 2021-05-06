@@ -1,0 +1,18 @@
+
+<%= simple_form_for(@mobile_release) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :build_code %>
+    <%= f.input :android_update_type %>
+    <%= f.input :ios_update_type %>
+    <%= f.input :android_number_of_installs %>
+    <%= f.input :ios_number_of_installs %>
+    <%= f.input :maintenance_mode %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

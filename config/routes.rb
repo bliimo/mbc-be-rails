@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :mobile_releases
   resources :notifications
   resources :players
   resources :game_records
@@ -76,6 +77,7 @@ Rails.application.routes.draw do
       get 'game/join_game'
       post 'game/spin_game'
       get 'game/:id', to: 'game#show'
+
       resources :notifications do
         collection do
           get :in_app_notifications
@@ -84,6 +86,14 @@ Rails.application.routes.draw do
           post :read
         end
       end
+
+      resources :mobile_releases do
+        collection do
+          get :check_for_updates
+          post :register_new_install
+        end
+      end
+      
     end
   end
 end
