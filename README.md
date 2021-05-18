@@ -16,3 +16,6 @@ docker-compose up
 
 # seed the database
 docker-compose run app rails db:seed
+
+# to build assets
+docker-compose run app rails assets:precompile
