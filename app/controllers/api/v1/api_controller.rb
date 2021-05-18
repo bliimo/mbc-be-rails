@@ -1,10 +1,15 @@
 class Api::V1::ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
-
+  
   private
 
-  def encode_token(payload)
-    JWT.encode(payload, 'pngtek_solutions_2020')
+  def encode_token(id)
+    secret = Base64.decode64("JWTSuperSecretKey")
+    payload = {"sub"=>"#{id}", "iat"=>DateTime.now.to_i, "exp"=>(DateTime.now + 7.days).to_i}
+    payload = {"sub"=>id, "iat"=>DateTime.now.to_i, "exp"=>(DateTime.now + 7.days).to_i}
+    token = JWT.encode(payload, secret, 'HS512')
+    Token.create(token_id: token, user_id: id)
+    token
   end
 
   def auth_header

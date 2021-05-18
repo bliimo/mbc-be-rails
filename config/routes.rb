@@ -62,6 +62,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'auth/connection_test'
       post 'auth/login'
+      post 'auth/login_with_facebook'
+      post 'auth/login_with_google'
+      post 'auth/login_with_apple'
       post 'auth/register_user'
       post 'auth/register_playmate'
       post 'auth/register_as_merchant'

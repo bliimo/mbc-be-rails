@@ -8,16 +8,205 @@ class Api::V1::AuthController < Api::V1::ApiController
   end
 
   def login
-    user = User.find_by(email: params[:email])
+    user = MbcUser.find_by(email: params[:email])
     if user.present? && user.valid_password?(params[:password])
-      unless user.status == 'Active'
-        render json: { message: 'Your account is inactive.' }, status: :unauthorized
-        return
+      tokens = Token.where(user_id: user.id)
+      if tokens.count > 0
+        return render json: {message: 'User was already logged in in another device', tokens: tokens}, status: :unauthorized
       end
-      render json: { user: user, token: encode_token({ id: user.id }) }, status: :ok
+
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+      }
+      render json: response, status: :ok
     else
       render json: { message: 'Log in failed! Invalid email or password.' }, status: :unauthorized
     end
+  end
+
+  def login_with_facebook
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    result = JSON.parse Net::HTTP.get(URI.parse("https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture.type(large)&access_token=#{access_token}"))
+    return render json: {message: "Invalid access key", fb_response: result}, status: :unprocessable_entity if result["error"].present?
+    user = MbcUser.find_by(email: result["email"])
+    if user.present?
+      tokens = Token.where(user_id: user.id)
+      if tokens.count > 0
+        return render json: {message: 'User was already logged in in another device', tokens: tokens}, status: :unauthorized
+      end
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+        result: result
+      }
+      render json: response, status: :ok
+    else
+      address = Address.create(
+        dtype: "address",
+        date_created: DateTime.now,
+        last_updated: DateTime.now,
+        country: "Philippines",
+        city_municipality_id_fk: 1,
+        province_id_fk: 1,
+        region_id_fk: 1
+      )
+      user = MbcUser.new(
+        :user_type => "audience",
+        :date_created => DateTime.now,
+        :last_updated => DateTime.now,
+        :birth_date => nil,
+        :email => result["email"] || "testemail#{DateTime.now.to_i.to_s}@mbc.com",
+        :full_name => "#{result["first_name"]}@@#{result["last_name"]}",
+        :gender => "UNDISCLOSED",
+        :mobile_number => nil,
+        :user_status => 3,
+        :username => nil,
+        :screen_name => "testagain",
+        :address_id => address.id,
+        :radio_station_id_fk => 1,
+        :password => DateTime.now.to_i.to_s
+      )
+      user.save
+      UserRole.create(user_id: user.id, role_id: 4)
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+        result: result
+      }
+      render json: response, status: :ok
+    end
+  end
+
+  def login_with_google
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    
+    decoded = JWT.decode(access_token, nil, false)
+    response = decoded.first
+
+    return render json: {message: "Invalid token", decoded: decoded}, status: :unprocessable_entity if response.blank?
+    user = MbcUser.find_by(email: response["email"])
+    if user.present?
+      tokens = Token.where(user_id: user.id)
+      if tokens.count > 0
+        return render json: {message: 'User was already logged in in another device', tokens: tokens}, status: :unauthorized
+      end
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+        response: response
+      }
+      render json: response, status: :ok
+    else
+      address = Address.create(
+        dtype: "address",
+        date_created: DateTime.now,
+        last_updated: DateTime.now,
+        country: "Philippines",
+        city_municipality_id_fk: 1,
+        province_id_fk: 1,
+        region_id_fk: 1
+      )
+      user = MbcUser.new(
+        :user_type => "audience",
+        :date_created => DateTime.now,
+        :last_updated => DateTime.now,
+        :birth_date => nil,
+        :email => response["email"] || "testemail#{DateTime.now.to_i.to_s}@mbc.com",
+        :full_name => "#{response["first_name"]}@@#{response["last_name"]}",
+        :gender => "UNDISCLOSED",
+        :mobile_number => nil,
+        :user_status => 3,
+        :username => nil,
+        :screen_name => "testagain",
+        :address_id => address.id,
+        :radio_station_id_fk => 1,
+        :password => DateTime.now.to_i.to_s
+      )
+      user.save
+      UserRole.create(user_id: user.id, role_id: 4)
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+        response: response
+      }
+      render json: response, status: :ok
+    end
+  end
+
+  def login_with_apple
+
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    
+    decoded = JWT.decode(access_token, nil, false)
+    response = decoded.first
+
+    return render json: {message: "Invalid token", decoded: decoded}, status: :unprocessable_entity if response.blank?
+
+    user = MbcUser.find_by(email: response["email"])
+    if user.present?
+      tokens = Token.where(user_id: user.id)
+      if tokens.count > 0
+        return render json: {message: 'User was already logged in in another device', tokens: tokens}, status: :unauthorized
+      end
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+        response: response
+      }
+      render json: response, status: :ok
+    else
+      address = Address.create(
+        dtype: "address",
+        date_created: DateTime.now,
+        last_updated: DateTime.now,
+        country: "Philippines",
+        city_municipality_id_fk: 1,
+        province_id_fk: 1,
+        region_id_fk: 1
+      )
+      user = MbcUser.new(
+        :user_type => "audience",
+        :date_created => DateTime.now,
+        :last_updated => DateTime.now,
+        :birth_date => nil,
+        :email => result["email"] || "testemail#{DateTime.now.to_i.to_s}@mbc.com",
+        :full_name => "#{params["first_name"]}@@#{params["last_name"]}",
+        :gender => nil,
+        :mobile_number => nil,
+        :user_status => 3,
+        :username => nil,
+        :screen_name => "testagain",
+        :address_id => address.id,
+        :radio_station_id_fk => 1,
+        :password => DateTime.now.to_i.to_s
+      )
+      user.save
+      response = {
+        accessToken: encode_token(user.id),
+        tokenType: "Bearer",
+        userType: user.user_type,
+        user: user,
+        response: response
+      }
+      render json: response, status: :ok
+    end
+
   end
 
   def register_user
