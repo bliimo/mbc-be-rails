@@ -185,9 +185,9 @@ class Api::V1::AuthController < Api::V1::ApiController
         :date_created => DateTime.now,
         :last_updated => DateTime.now,
         :birth_date => nil,
-        :email => result["email"] || "testemail#{DateTime.now.to_i.to_s}@mbc.com",
+        :email => response["email"] || "testemail#{DateTime.now.to_i.to_s}@mbc.com",
         :full_name => "#{params["first_name"]}@@#{params["last_name"]}",
-        :gender => nil,
+        :gender => "UNDISCLOSED",
         :mobile_number => nil,
         :user_status => 3,
         :username => nil,
@@ -197,6 +197,8 @@ class Api::V1::AuthController < Api::V1::ApiController
         :password => DateTime.now.to_i.to_s
       )
       user.save
+      UserRole.create(user_id: user.id, role_id: 4)
+
       response = {
         accessToken: encode_token(user.id),
         tokenType: "Bearer",

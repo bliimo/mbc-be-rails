@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/faker-ruby/faker.git
-  revision: 548a23cf193073376073225846ac641cd80defd5
+  revision: 3f78cb13cfa5eaa811b7d05f9df46e7f27bab348
   branch: master
   specs:
     faker (2.18.0)
@@ -68,7 +68,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     awesome_print (1.9.2)
     aws-eventstream (1.1.1)
-    aws-partitions (1.451.0)
+    aws-partitions (1.460.0)
     aws-sdk-core (3.114.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -149,7 +149,7 @@ GEM
     msgpack (1.4.2)
     mysql2 (0.5.3)
     nio4r (2.5.7)
-    nokogiri (1.11.3)
+    nokogiri (1.11.5)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     omniauth (2.0.4)
@@ -161,7 +161,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (4.0.6)
-    puma (4.3.7)
+    puma (4.3.8)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -200,7 +200,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.20.3, < 2.0)
     rake (13.0.3)
-    rb-fsevent (0.10.4)
+    rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.2.5)
