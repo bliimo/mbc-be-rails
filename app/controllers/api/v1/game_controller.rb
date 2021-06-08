@@ -12,7 +12,7 @@ class Api::V1::GameController < Api::V1::ApiController
     Rails.logger.debug "saving game record"
     if game_record.save
       render json: game_record
-      start_count_down(game_record)
+      start_count_down(game_record, false)
     else
       render json: game_record.errors, status: :unprocessable_entity
     end
@@ -54,6 +54,20 @@ class Api::V1::GameController < Api::V1::ApiController
     render json: {message: 'Game broadcasted'}
   end
 
+  def override_timer
+    game_record = GameRecord.find_by_game_id(game_params[:game_id])
+    # BROADCAST STATUS
+
+    GameChannel.broadcast_to(
+      game_params[:game_id],
+      { type: "OVERRIDE", message: 'Game overrided'}
+    )
+
+    start_count_down(game_record, true)
+
+    render json: game_record
+  end
+
   private
   def game_params
     params.require(:game).permit(
@@ -69,58 +83,65 @@ class Api::V1::GameController < Api::V1::ApiController
     )
   end
 
-  def start_count_down(game_record)
+  def start_count_down(game_record, isOverRide)
     # set time 
     Rails.logger.debug "Setting countdown"
           
     time = params[:game][:seconds].to_i + GameRecord.lobby_time
+    time = GameRecord.lobby_time if isOverRide
     Rails.logger.debug time.to_s
-
+    
     Thread.new do
       sleep time
       Rails.logger.debug "Countdown finished"
 
-      # check all joined users
-      Rails.logger.debug "Getting all users"
-      players = Player.where(game_id: game_record.game_id)
-
-      # generate winner 
-      # get number of players
-      player_count = players.count
-      number_of_winners = game_record.number_of_winners
-      number_of_winners = player_count if player_count < game_record.number_of_winners
-
-      Rails.logger.debug "Player count: " + player_count.to_s
-      Rails.logger.debug "Number of winners: " + number_of_winners.to_s
-
-      Rails.logger.debug "Generating random indexes"
-      indexes = []
-      while indexes.count < number_of_winners
-        random_index = Faker::Number.between(from: 0, to: player_count - 1)
-        indexes.push(random_index) if !indexes.include? random_index
-        Rails.logger.debug "generated index: " + random_index.to_s
+      if GameRecord.find(game_record.id).status.present?
+        Rails.logger.debug "Game was overrided"
+      else
+        # check all joined users
+        Rails.logger.debug "Getting all users"
+        players = Player.where(game_id: game_record.game_id)
+  
+        # generate winner 
+        # get number of players
+        player_count = players.count
+        number_of_winners = game_record.number_of_winners
+        number_of_winners = player_count if player_count < game_record.number_of_winners
+  
+        Rails.logger.debug "Player count: " + player_count.to_s
+        Rails.logger.debug "Number of winners: " + number_of_winners.to_s
+  
+        Rails.logger.debug "Generating random indexes"
+        indexes = []
+        while indexes.count < number_of_winners
+          random_index = Faker::Number.between(from: 0, to: player_count - 1)
+          indexes.push(random_index) if !indexes.include? random_index
+          Rails.logger.debug "generated index: " + random_index.to_s
+        end
+  
+        # create game winner
+        game_winner = GameWinner.create(game_id: game_params[:game_id])
+        # create player winner
+  
+        winners = indexes.map do |item|
+          mbc_user = MbcUser.find_by_id(players[item].user_id)
+          name = mbc_user.full_name if mbc_user.present?
+          Winner.create(user_id: players[item].user_id, game_winner_game_winner_id: game_winner.game_winner_id, full_name: name)
+          players[item].win_status = "Win"
+          players[item].save
+          players[item]
+        end
+        
+        # broadcast winner
+        Rails.logger.debug "broadcasting"
+        GameChannel.broadcast_to(
+          game_params[:game_id],
+          { winners: winners, player_count: player_count, players: players}
+        )
+        game_record.status = "Ended"
+        game_record.save
       end
 
-      # create game winner
-      game_winner = GameWinner.create(game_id: game_params[:game_id])
-      # create player winner
-
-      winners = indexes.map do |item|
-        mbc_user = MbcUser.find_by_id(players[item].user_id)
-        name = mbc_user.full_name if mbc_user.present?
-        Winner.create(user_id: players[item].user_id, game_winner_game_winner_id: game_winner.game_winner_id, full_name: name)
-        players[item].win_status = "Win"
-        players[item].save
-        players[item]
-      end
-      
-      # broadcast winner
-      Rails.logger.debug "broadcasting"
-      GameChannel.broadcast_to(
-        game_params[:game_id],
-        { winners: winners, player_count: player_count, players: players}
-      )
-      # save to database
     end
   end
 end

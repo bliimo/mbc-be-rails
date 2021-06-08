@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       get 'game/join_game'
       post 'game/spin_game'
       post 'game/broadcast_game'
+      post 'game/override_timer'
       get 'game/:id', to: 'game#show'
 
       resources :notifications do
@@ -97,6 +98,8 @@ Rails.application.routes.draw do
           post :register_new_install
         end
       end
+
+      resources :stations
       
     end
   end
