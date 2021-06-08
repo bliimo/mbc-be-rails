@@ -46,6 +46,14 @@ class Api::V1::GameController < Api::V1::ApiController
     end
   end
 
+  def broadcast_game
+    GameListChannel.broadcast_to(
+        "MBC_GAME",
+        { message: "GAME_LIST_UPDATED"}
+      )
+    render json: {message: 'Game broadcasted'}
+  end
+
   private
   def game_params
     params.require(:game).permit(
