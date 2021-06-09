@@ -74,6 +74,8 @@ Rails.application.routes.draw do
       post 'auth/verify_forgot_password_code'
       post 'auth/change_password'
       post 'auth/resend_forgot_password_code'
+      post 'auth/broadcast_logout'
+      get 'auth/tokens'
       get 'auth/profile'
 
       post 'game/create_game'

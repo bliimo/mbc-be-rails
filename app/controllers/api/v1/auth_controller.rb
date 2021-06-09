@@ -7,6 +7,17 @@ class Api::V1::AuthController < Api::V1::ApiController
     render json: { message: 'yep its working' }, status: :ok
   end
 
+  def broadcast_logout
+    UserStatusChannel.broadcast_to(
+      MbcUser.find(params[:id]),
+      { type: "LOGOUT"}
+    )
+  end
+
+  def tokens
+    render json: Token.where(user_id: params[:id])
+  end 
+
   def login
     user = MbcUser.find_by(email: params[:email])
     if user.present? && user.valid_password?(params[:password])
