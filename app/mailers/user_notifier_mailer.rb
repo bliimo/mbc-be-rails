@@ -1,14 +1,14 @@
 class UserNotifierMailer < ApplicationMailer
-  default from: 'no-reply@playboy.com'
+  default from: 'no-reply@mbc.com'
   def send_signup_email(user)
     @user = user
     mail(to: 'rorens05@gmail.com',
          subject: 'Thanks for signing up for our amazing app')
   end
 
-  def send_confirmation_email(user, request)
+  def send_confirmation_email(user, verification)
     @user = user
-    @confirmation_url = "#{request.present? ? request.base_url : ''}/confirm_email/#{@user.confirmation_token}"
+    @verification = verification
     mail(to: @user.email,
          subject: 'Confirm your Account')
   end

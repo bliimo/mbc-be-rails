@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       post 'auth/change_password'
       post 'auth/resend_forgot_password_code'
       post 'auth/broadcast_logout'
+      post 'auth/send_confirmation_email'
       get 'auth/tokens'
       get 'auth/profile'
 

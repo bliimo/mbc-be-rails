@@ -26,6 +26,20 @@ class Api::V1::AuthController < Api::V1::ApiController
         return render json: {message: 'User was already logged in in another device', tokens: tokens}, status: :unauthorized
       end
 
+      if user.user_status != 3
+        verification = Verification.where(email: params[:email]).last
+        if verification.blank?
+          verification = Verification.create(
+            code:   (SecureRandom.random_number(9e5) + 1e5).to_i.to_s,
+            email:  user.email,
+            email_status:  "SENT",
+            user_id:  user.id
+          )
+        end
+        UserNotifierMailer.send_confirmation_email(user, verification).deliver
+        return render json: {message: "Your account is not verified. Please go to your email to verify", code: 400}, status: 400
+      end
+
       response = {
         accessToken: encode_token(user.id),
         tokenType: "Bearer",
@@ -375,6 +389,23 @@ class Api::V1::AuthController < Api::V1::ApiController
     else
       render json: { message: 'No user found' }, status: :unprocessable_entity
     end
+  end
+
+  def send_confirmation_email
+    user = MbcUser.find_by(email: params[:email])
+    return render json: {error: {message: 'user not found'}}, status: 404 if user.blank?
+
+    verification = Verification.where(email: params[:email]).last
+    if verification.blank?
+      verification = Verification.create(
+        code:   (SecureRandom.random_number(9e5) + 1e5).to_i.to_s,
+        email:  user.email,
+        email_status:  "SENT",
+        user_id:  user.id
+      )
+    end
+    UserNotifierMailer.send_confirmation_email(user, verification).deliver
+    render json: {message: "Email sent successfully"}
   end
 
   def resend_verification_code
