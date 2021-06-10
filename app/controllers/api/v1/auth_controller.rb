@@ -37,7 +37,7 @@ class Api::V1::AuthController < Api::V1::ApiController
           )
         end
         UserNotifierMailer.send_confirmation_email(user, verification).deliver
-        return render json: {message: "Your account is not verified. Please go to your email to verify", code: 400}, status: 400
+        return render json: {message: "Your account is not verified. Please go to your email to verify.", code: 400}, status: 400
       end
 
       response = {
