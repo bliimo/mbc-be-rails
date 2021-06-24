@@ -57,7 +57,12 @@ class Api::V1::AuthController < Api::V1::ApiController
     return render json: {error: {message: "Access token is required"}} if access_token.blank?
     result = JSON.parse Net::HTTP.get(URI.parse("https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture.type(large)&access_token=#{access_token}"))
     return render json: {message: "Invalid access key", fb_response: result}, status: :unprocessable_entity if result["error"].present?
-    user = MbcUser.find_by(email: result["email"])
+    user = nil
+    if(result["email"])
+      user = MbcUser.find_by(email: result["email"])
+    else
+      user = MbcUser.find_by(id: result["id"])
+    end
     if user.present?
       tokens = Token.where(user_id: user.id)
       if tokens.count > 0
@@ -82,6 +87,7 @@ class Api::V1::AuthController < Api::V1::ApiController
         region_id_fk: 1
       )
       user = MbcUser.new(
+        :id => result["id"],
         :user_type => "audience",
         :date_created => DateTime.now,
         :last_updated => DateTime.now,
