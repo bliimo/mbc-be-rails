@@ -104,6 +104,13 @@ Rails.application.routes.draw do
 
       resources :stations
       
+      resources :documents do
+        collection do
+          get :terms_and_conditions
+          get :privacy_policy
+        end
+      end
+
     end
   end
 end
