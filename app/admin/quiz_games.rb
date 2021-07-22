@@ -5,7 +5,7 @@ ActiveAdmin.register QuizGame do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  # permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, :price, :number_of_winner, :schedule, :status
+  permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, :price, :number_of_winner, :schedule, :status
   #
   # or
   #
