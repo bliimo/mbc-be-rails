@@ -9,17 +9,24 @@ default: &default
 
 development:
   <<: *default
+  database: <%= ENV['DB_NAME'] || "mbc_dev" %>
+  username: <%= ENV['DB_USER'] || "bliimo" %>
+  password: <%= ENV['DB_PASSWORD'] || "password" %>
+  host:     <%= ENV['DB_HOST'] || "localhost" %>
 
 secondary:
   <<: *default
-  database: <%= ENV['MBC_DB_NAME'] %>
-  username: <%= ENV['MBC_DB_USER'] %>
-  password: <%= ENV['MBC_DB_PASSWORD'] %>
-  host: <%= ENV['MBC_DB_HOST'] %>
-  
+  database: <%= ENV['MBC_DB_NAME'] || "mbc_api_dev" %>
+  username: <%= ENV['MBC_DB_USER'] || "bliimodev" %>
+  password: <%= ENV['MBC_DB_PASSWORD'] || "P@$$w0RD" %>
+  host: <%= ENV['MBC_DB_HOST'] || "199.91.69.177" %>
+
 test:
   <<: *default
-  database: mbc_backend_test
+  database: <%= ENV['DB_NAME'] || "mbc_dev_test" %>
+  username: <%= ENV['DB_USER'] || "bliimo" %>
+  password: <%= ENV['DB_PASSWORD'] || "password" %>
+  host:     <%= ENV['DB_HOST'] || "localhost" %>
 
 production:
   <<: *default
