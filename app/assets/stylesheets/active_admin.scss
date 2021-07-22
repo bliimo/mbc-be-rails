@@ -4,3 +4,14 @@
 // @import "arctic_admin/base";
 $primary-color: #00b5fd;
 @import "arctic_admin/base";
+
+@import "select2";
+@import "select2-bootstrap";
+
+.status_tag.active{
+  background-color: green
+}
+
+.width-100{
+  width: 100%
+}

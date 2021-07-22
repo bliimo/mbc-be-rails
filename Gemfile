@@ -3,6 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.2'
 
+# Select2 for better select
+gem "select2-rails"
 # Administration Gem
 gem 'activeadmin'
 # Plus integrations with:
