@@ -1,0 +1,25 @@
+panel question.question, class: 'main-panel' do
+  attributes_table_for question do
+    row :question
+    row :countdown_in_seconds
+  end
+  panel "Options" do
+    div class: "option-container" do
+      question.question_choices.each do |question_choice|
+        div class: 'option-item', 
+            style: question_choice.style do
+          div class: 'option-text-container' do
+            para question_choice.label, class: 'option-label'
+            para question_choice.description, class: 'option-description'
+            if question_choice.is_answer
+              para "correct answer", class: 'correct-label' 
+            else
+              para "wrong answer", class: 'wrong-label' 
+            end
+          end
+          
+        end
+      end
+    end
+  end
+end

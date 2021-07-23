@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_22_100036) do
+ActiveRecord::Schema.define(version: 2021_07_23_062709) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -98,6 +98,17 @@ ActiveRecord::Schema.define(version: 2021_07_22_100036) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "question_choices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.string "label"
+    t.string "description"
+    t.string "background_color", default: "#ffffff"
+    t.boolean "is_answer"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["question_id"], name: "index_question_choices_on_question_id"
+  end
+
   create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "quiz_game_id", null: false
     t.text "question"
@@ -158,6 +169,7 @@ ActiveRecord::Schema.define(version: 2021_07_22_100036) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "question_choices", "questions"
   add_foreign_key "questions", "quiz_games"
   add_foreign_key "user_notifications", "notifications"
 end

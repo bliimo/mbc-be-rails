@@ -3,7 +3,22 @@ ActiveAdmin.register QuizGame do
 
   permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, 
                 :price, :number_of_winner, :schedule, :status, :image,
-                questions_attributes: %i[image question countdown_in_seconds]
+                questions_attributes: [
+                  :id,
+                  :image, 
+                  :question, 
+                  :countdown_in_seconds,
+                  :_destroy,
+                  question_choices_attributes: [
+                    :id,
+                    :image,
+                    :label,
+                    :description,
+                    :background_color,
+                    :is_answer,
+                    :_destroy
+                  ]
+                ]
 
   index do
     selectable_column
@@ -22,10 +37,10 @@ ActiveAdmin.register QuizGame do
     actions
   end
 
-  form do |f|
+  form do |f|  
+    f.semantic_errors *f.object.errors.keys
     tabs do
       tab 'General' do
-        f.semantic_errors
         f.input :image, as: :file
         f.input :title
         f.input :description, input_html: { rows: "2" }
@@ -38,15 +53,28 @@ ActiveAdmin.register QuizGame do
         f.input :status
       end
       tab 'Questions' do
-          f.has_many :questions,
-                     new_record: 'Add Question',
-                     remove_record: 'Remove Question',
-                     allow_destroy: ->(_u) { current_admin_user.present? }, 
-                     class: "question-input-container" do |b|
-            b.input :image, as: :file
-            b.input :question, input_html: { rows: "2" }
-            b.input :countdown_in_seconds
+        f.has_many :questions,
+                    new_record: 'Add Question',
+                    remove_record: 'Remove Question',
+                    allow_destroy: ->(_u) { current_admin_user.present? }, 
+                    class: "question-input-container" do |b|
+          b.input :image, as: :file
+          b.input :question, input_html: { rows: "2" }
+          b.input :countdown_in_seconds
+          
+          b.has_many :question_choices,
+          new_record: 'Add Choice',
+          remove_record: 'Remove Choice',
+          allow_destroy: ->(_u) { current_admin_user.present? }, 
+          class: "question-choices-container" do |q|
+            q.input :image, as: :file
+            q.input :label
+            q.input :description
+            q.input :background_color, as: :color
+            q.input :is_answer
           end
+          
+        end
       end
     end
     f.actions
@@ -86,7 +114,9 @@ ActiveAdmin.register QuizGame do
           
         end
         tab 'Questions' do
-
+          quiz.questions.each do |question|
+            render 'question_item', question: question
+          end
         end
         tab 'Participants' do
 
