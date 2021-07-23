@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_22_075029) do
+ActiveRecord::Schema.define(version: 2021_07_22_100036) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -98,6 +98,15 @@ ActiveRecord::Schema.define(version: 2021_07_22_075029) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "quiz_game_id", null: false
+    t.text "question"
+    t.integer "countdown_in_seconds"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["quiz_game_id"], name: "index_questions_on_quiz_game_id"
+  end
+
   create_table "quiz_games", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -149,5 +158,6 @@ ActiveRecord::Schema.define(version: 2021_07_22_075029) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "questions", "quiz_games"
   add_foreign_key "user_notifications", "notifications"
 end

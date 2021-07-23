@@ -5,5 +5,8 @@ class QuizGame < ApplicationRecord
   belongs_to :sponsor, class_name: 'Sponsor', foreign_key: :sponsor_id
   belongs_to :radio_station, class_name: 'RadioStation', foreign_key: :radio_station_id
   
+  has_many :questions, dependent: :destroy
+  accepts_nested_attributes_for :questions, allow_destroy: true
+
   enum status: ["active", "inactive"]
 end

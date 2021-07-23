@@ -1,8 +1,10 @@
 ActiveAdmin.register QuizGame do
-  menu parent: ["Games"]
+  menu parent: ["Games"], priority: 1
 
-  permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, :price, :number_of_winner, :schedule, :status, :image
-  
+  permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, 
+                :price, :number_of_winner, :schedule, :status, :image,
+                questions_attributes: %i[image question countdown_in_seconds]
+
   index do
     selectable_column
     id_column
@@ -21,17 +23,32 @@ ActiveAdmin.register QuizGame do
   end
 
   form do |f|
-    f.semantic_errors
-    f.input :image, as: :file
-    f.input :title
-    f.input :description
-    f.input :sponsor
-    f.input :city
-    f.input :radio_station
-    f.input :price
-    f.input :number_of_winner
-    f.input :schedule
-    f.input :status
+    tabs do
+      tab 'General' do
+        f.semantic_errors
+        f.input :image, as: :file
+        f.input :title
+        f.input :description, input_html: { rows: "2" }
+        f.input :sponsor
+        f.input :city
+        f.input :radio_station
+        f.input :price, input_html: { rows: "2" }
+        f.input :number_of_winner
+        f.input :schedule
+        f.input :status
+      end
+      tab 'Questions' do
+          f.has_many :questions,
+                     new_record: 'Add Question',
+                     remove_record: 'Remove Question',
+                     allow_destroy: ->(_u) { current_admin_user.present? }, 
+                     class: "question-input-container" do |b|
+            b.input :image, as: :file
+            b.input :question, input_html: { rows: "2" }
+            b.input :countdown_in_seconds
+          end
+      end
+    end
     f.actions
   end
   
