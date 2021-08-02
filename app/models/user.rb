@@ -5,18 +5,15 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable
 
-  has_one_attached :image
-  has_one :merchant, dependent: :destroy
-  has_one :buyer, dependent: :destroy
-  has_one :playmate, dependent: :destroy
-  has_many :conversation_members, dependent: :destroy
-  has_many :conversations, through: :conversation_members
-  has_many :in_app_currency_transactions, dependent: :destroy
+  belongs_to :region
+  belongs_to :province
+  belongs_to :city
 
+  has_one_attached :image
   before_validation :generate_confirmation_token
 
   enum gender: %w[Male Female]
-  enum role: %w[Admin Merchant Buyer Playmate]
+  enum role: %w[Player]
   enum status: %w[Active Inactive]
 
   validates :confirmation_token, presence: true, uniqueness: { case_sensitive: false }
@@ -24,10 +21,6 @@ class User < ApplicationRecord
   validates :contact_number, presence: true
   validates :name, presence: true
   validates :birthday, presence: true
-
-  def active_for_authentication?
-    super and role == 'Admin' and status == 'Active'
-  end
 
   def image_path
     return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true) if image.attached?
@@ -46,12 +39,17 @@ class User < ApplicationRecord
 
   def code_expired?
     return true if verification_sent_at.present? && verification_sent_at + 1.days < Date.today
-
     false
   end
 
   def total_in_app_currency
     in_app_currency_transactions.sum(:amount)
+  end
+
+  def password_required?
+    return false
+    # return false if skip_password_validation
+    super
   end
 
   private

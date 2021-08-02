@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_23_062709) do
+ActiveRecord::Schema.define(version: 2021_08_02_071211) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -59,6 +59,15 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "province_id", null: false
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["province_id"], name: "index_cities_on_province_id"
+  end
+
   create_table "game_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "game_id"
     t.datetime "start_time"
@@ -98,6 +107,15 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "provinces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "region_id", null: false
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["region_id"], name: "index_provinces_on_region_id"
+  end
+
   create_table "question_choices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "question_id", null: false
     t.string "label"
@@ -128,6 +146,13 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.integer "number_of_winner"
     t.datetime "schedule"
     t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "regions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -164,11 +189,17 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.datetime "verified_at"
     t.string "verification_code"
     t.datetime "verification_sent_at"
+    t.string "country"
+    t.integer "region_id"
+    t.integer "province_id"
+    t.integer "city_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "cities", "provinces"
+  add_foreign_key "provinces", "regions"
   add_foreign_key "question_choices", "questions"
   add_foreign_key "questions", "quiz_games"
   add_foreign_key "user_notifications", "notifications"

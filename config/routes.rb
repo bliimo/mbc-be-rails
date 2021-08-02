@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   get 'profile', to: 'profile#index'
   get 'profile/change_password'
   patch 'profile/update_password'
-  devise_for :users
+  # devise_for :users
   get 'users/:id' => 'users#show'
   get 'home/index'
   root 'home#index'
