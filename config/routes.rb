@@ -113,6 +113,7 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :quiz_games 
     end
   end
 end

@@ -11,4 +11,34 @@ class QuizGame < ApplicationRecord
   enum status: ["active", "inactive"]
 
   validates :title, presence: true
+
+  def image_path
+    return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true) if image.attached?
+  end
+
+  def self.serializer
+    {
+      include: [
+        :sponsor,
+        :city,
+        :radio_station,
+        {
+          questions: {
+            include: [
+              {
+                question_choices: {
+                  include: [],
+                  methods: [:image_path]
+                }
+              }
+            ],
+            methods: [:image_path]
+          }
+        }
+      ],
+      methods: [
+        :image_path
+      ]
+    }
+  end
 end
