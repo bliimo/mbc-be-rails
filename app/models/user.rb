@@ -42,14 +42,17 @@ class User < ApplicationRecord
     false
   end
 
-  def total_in_app_currency
-    in_app_currency_transactions.sum(:amount)
-  end
-
   def password_required?
     return false
     # return false if skip_password_validation
     super
+  end
+
+  def self.serializer
+    {
+      methods: %i[image_path],
+      include: []
+    }
   end
 
   private
