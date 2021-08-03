@@ -7,7 +7,7 @@ class GameRecord < ApplicationRecord
 
 
   def self.lobby_time
-    15
+    30
   end
 
   def players
