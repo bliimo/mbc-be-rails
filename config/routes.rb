@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   get 'profile', to: 'profile#index'
   get 'profile/change_password'
   patch 'profile/update_password'
-  devise_for :users
+  # devise_for :users
   get 'users/:id' => 'users#show'
   get 'home/index'
   root 'home#index'
@@ -61,6 +61,21 @@ Rails.application.routes.draw do
   get 'confirm_email/:token', to: 'email_handler#confirm_email'
 
   namespace :api do
+    namespace :v2 do
+      get 'auth/connection_test'
+      post 'auth/login'
+      get 'auth/profile'
+      post 'auth/register'
+
+      resources :locations do 
+        collection do
+          get :regions
+          get :provinces
+          get :cities
+        end
+      end
+
+    end
     namespace :v1 do
       get 'auth/connection_test'
       post 'auth/login'
@@ -113,6 +128,7 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :quiz_games 
     end
   end
 end
