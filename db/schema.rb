@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_23_062709) do
+ActiveRecord::Schema.define(version: 2021_08_03_113756) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -55,8 +55,20 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.integer "role", default: 0
+    t.integer "status", default: 0
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "province_id", null: false
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["province_id"], name: "index_cities_on_province_id"
   end
 
   create_table "game_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -80,6 +92,15 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "networks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.bigint "admin_user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "background_color", default: "#ffffff"
+    t.index ["admin_user_id"], name: "index_networks_on_admin_user_id"
+  end
+
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -92,10 +113,19 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
 
   create_table "players", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "game_id"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.integer "win_status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "provinces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "region_id", null: false
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["region_id"], name: "index_provinces_on_region_id"
   end
 
   create_table "question_choices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -132,6 +162,30 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "radio_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "network_id", null: false
+    t.bigint "city_id", null: false
+    t.string "name"
+    t.text "description"
+    t.decimal "frequency", precision: 10
+    t.string "audio_streaming_link"
+    t.string "video_string_link"
+    t.integer "status"
+    t.bigint "admin_user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["admin_user_id"], name: "index_radio_stations_on_admin_user_id"
+    t.index ["city_id"], name: "index_radio_stations_on_city_id"
+    t.index ["network_id"], name: "index_radio_stations_on_network_id"
+  end
+
+  create_table "regions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
     t.bigint "notification_id", null: false
@@ -164,12 +218,22 @@ ActiveRecord::Schema.define(version: 2021_07_23_062709) do
     t.datetime "verified_at"
     t.string "verification_code"
     t.datetime "verification_sent_at"
+    t.string "country"
+    t.integer "region_id"
+    t.integer "province_id"
+    t.integer "city_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "cities", "provinces"
+  add_foreign_key "networks", "admin_users"
+  add_foreign_key "provinces", "regions"
   add_foreign_key "question_choices", "questions"
   add_foreign_key "questions", "quiz_games"
+  add_foreign_key "radio_stations", "admin_users"
+  add_foreign_key "radio_stations", "cities"
+  add_foreign_key "radio_stations", "networks"
   add_foreign_key "user_notifications", "notifications"
 end
