@@ -1,6 +1,7 @@
 class Api::V1::ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
-  
+  before_action :start_logging
+  after_action :end_logging
   private
 
   def encode_token(id)
@@ -41,4 +42,17 @@ class Api::V1::ApiController < ApplicationController
     render json: { message: 'Unauthorized' }, status: :unauthorized unless !!session_user
   end
 
+  def start_logging
+    @time = DateTime.now
+    Rails.logger.debug "Start Logging"
+    Rails.logger.debug "Current User: #{session_user.present? ? session_user.full_name  : 'No current user'}"
+    Rails.logger.debug "Timestamp: #{@time.as_json}"
+  end
+
+  def end_logging
+    Rails.logger.debug "End Logging"
+    Rails.logger.debug "Current User: #{session_user.present? ? session_user.full_name  : 'No current user'}"
+    Rails.logger.debug "Timestamp: #{@time.as_json}"
+    Rails.logger.debug "Milliseconds elapse: #{(DateTime.now.to_f - @time.to_f) * 1000}"
+  end
 end
