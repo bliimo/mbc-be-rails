@@ -12,4 +12,7 @@ jQuery(function() {
   $("#user_region_id").select2()
   $("#user_province_id").select2()
   $("#user_city_id").select2()
+  $("#radio_station_city_id").select2()
+  $(".station_city_select").select2()
+  
 })

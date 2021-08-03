@@ -74,6 +74,7 @@ Rails.application.routes.draw do
           get :cities
         end
       end
+      resources :networks, only: [:index]
 
     end
     namespace :v1 do

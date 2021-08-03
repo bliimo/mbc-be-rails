@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  network: one
+  city: one
+  name: MyString
+  description: MyText
+  frequency: 9.99
+  audio_streaming_link: MyString
+  video_string_link: MyString
+  status: 1
+  admin_user: one
+
+two:
+  network: two
+  city: two
+  name: MyString
+  description: MyText
+  frequency: 9.99
+  audio_streaming_link: MyString
+  video_string_link: MyString
+  status: 1
+  admin_user: two

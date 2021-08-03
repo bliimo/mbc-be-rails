@@ -147,7 +147,8 @@ class Api::V2::AuthController < Api::V2::ApiController
       :country,
       :region_id,
       :province_id,
-      :city_id
+      :city_id,
+      :password
     )
   end
 

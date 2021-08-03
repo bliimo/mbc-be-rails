@@ -1,9 +1,16 @@
 class RadioStation < ActiveRecord::Base
-  establish_connection(:secondary)
-  self.table_name = "radio_station"
-  has_many :quiz_games, :foreign_key => "radio_station_id", :class_name => "QuizGame" 
+  belongs_to :network
+  belongs_to :city
+  belongs_to :admin_user
+  has_one_attached :image
 
-  def name
-    radio_station_name
+  has_many :quiz_games, :foreign_key => "radio_station_id", :class_name => "QuizGame" 
+  enum status: ["Active", "Inactive"]
+
+  validates :name, presence: true
+
+  def image_path
+    return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true) if image.attached?
   end
+
 end
