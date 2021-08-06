@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_033551) do
+ActiveRecord::Schema.define(version: 2021_08_06_032823) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_033551) do
     t.bigint "admin_user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "background_color", default: "#ffffff"
     t.index ["admin_user_id"], name: "index_networks_on_admin_user_id"
   end
 
@@ -112,7 +113,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_033551) do
 
   create_table "players", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "game_id"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.integer "win_status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -208,7 +209,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_033551) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "username"
     t.string "contact_number"
-    t.string "name"
+    t.string "first_name"
     t.integer "gender"
     t.date "birthday"
     t.integer "role"
@@ -221,6 +222,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_033551) do
     t.integer "region_id"
     t.integer "province_id"
     t.integer "city_id"
+    t.string "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

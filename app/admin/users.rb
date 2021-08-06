@@ -4,7 +4,8 @@ ActiveAdmin.register User do
   permit_params :email, 
                 :username, 
                 :contact_number, 
-                :name, 
+                :first_name, 
+                :last_name, 
                 :gender, 
                 :birthday, 
                 :role, 
@@ -24,7 +25,9 @@ ActiveAdmin.register User do
     column :email
     column :username
     column :contact_number
-    column :name
+    column "Name", :first_name do |user|
+      user.name
+    end
     column :gender
     column :birthday
     column :status do |user|
@@ -39,7 +42,8 @@ ActiveAdmin.register User do
 
     f.input :username
     f.input :contact_number
-    f.input :name
+    f.input :first_name
+    f.input :last_name
     f.input :email
     f.input :country, as: :string
     f.input :gender
@@ -65,7 +69,8 @@ ActiveAdmin.register User do
                 row :email
                 row :username 
                 row :contact_number 
-                row :name 
+                row :first_name 
+                row :last_name 
                 row :gender 
                 row :birthday 
                 row :role 

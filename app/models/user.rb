@@ -19,7 +19,8 @@ class User < ApplicationRecord
   validates :confirmation_token, presence: true, uniqueness: { case_sensitive: false }
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates :contact_number, presence: true
-  validates :name, presence: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
   validates :birthday, presence: true
 
   def image_path
@@ -53,6 +54,10 @@ class User < ApplicationRecord
       methods: %i[image_path],
       include: []
     }
+  end
+
+  def name
+    "#{first_name} #{last_name}"
   end
 
   private

@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
-  def index; end
+  def index;
+  redirect_to admin_dashboard_path
+  end
 
 end
