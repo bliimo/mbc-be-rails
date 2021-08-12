@@ -70,8 +70,8 @@ Rails.application.configure do
     domain: 'bliimotechnologies.com',
     authentication: 'plain',
     tls: true,
-    user_name: 'gbi@bliimotechnologies.com',
-    password: 'dYX6JD9J',
+    user_name: 'dev-test-email@bliimotechnologies.com',
+    password: 'wZV2frghc68XmEvC',
     enable_starttls_auto: true
   }
 

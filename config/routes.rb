@@ -66,7 +66,12 @@ Rails.application.routes.draw do
       post 'auth/login'
       get 'auth/profile'
       post 'auth/register'
-
+      post 'auth/forgot_password'
+      post 'auth/resend_forgot_password_code'
+      post 'auth/verify_forgot_password_code'
+      post 'auth/change_password'
+      patch 'profile/update_profile'
+      
       resources :locations do 
         collection do
           get :regions

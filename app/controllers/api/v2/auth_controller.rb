@@ -5,9 +5,9 @@ class Api::V2::AuthController < Api::V2::ApiController
 
   def connection_test
     Rails.logger.debug "connection test action"
-    Rails.logger.debug "Date #{DateTime.now.as_json}"
-    Rails.logger.debug session_user.as_json
-    render json: { message: 'yep its working' }, status: :ok
+    user = User.find_by(email: "wasayuda@mailinator.com")
+    UserNotifierMailer.send_verification_code(user, request).deliver
+    render json: { message: 'yep its working', user: user }, status: :ok
   end
 
   def login
@@ -32,7 +32,7 @@ class Api::V2::AuthController < Api::V2::ApiController
         user.image = base64_to_file(params[:image])
         user.save
       end
-      render json: user.as_json(User.serializer)
+      render json: {user: user.as_json(User.serializer), token: encode_token({ id: user.id }) }
     else
       render json: user.errors.full_messages, status: :unprocessable_entity
     end
@@ -101,12 +101,14 @@ class Api::V2::AuthController < Api::V2::ApiController
   end
 
   def verify_forgot_password_code
-    user = User.find_by(verification_code: params[:verification_code])
+    verification_code = params[:verification_code]
+    return render json: { message: 'Code not valid' }, status: :unprocessable_entity if verification_code.blank?
+    user = User.find_by(verification_code: verification_code)
     if user.present?
       if user.code_expired?
         render json: { message: 'code expired' }, status: :unprocessable_entity
       else
-        render json: { message: 'Code valid' }, status: :ok
+        render json: { message: 'Code valid', user: user }, status: :ok
       end
     else
       render json: { message: 'Code not valid' }, status: :unprocessable_entity
@@ -151,31 +153,5 @@ class Api::V2::AuthController < Api::V2::ApiController
       :city_id,
       :password
     )
-  end
-
-  def address_params
-    params.require(:address).permit(
-      :country,
-      :province,
-      :city,
-      :barangay,
-      :address_information,
-      :postal_code
-    )
-  end
-
-  def merchant_params
-    params.require(:merchant).permit(
-      :shop_name,
-      :shop_description,
-      :account_type
-    )
-  end
-
-  def initialize_user
-    user = User.new(user_params)
-    user.status = 0
-    user.generate_verification_code
-    user
   end
 end
