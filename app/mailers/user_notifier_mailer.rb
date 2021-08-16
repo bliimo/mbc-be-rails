@@ -6,9 +6,8 @@ class UserNotifierMailer < ApplicationMailer
          subject: 'Thanks for signing up for our amazing app')
   end
 
-  def send_confirmation_email(user, verification)
+  def send_confirmation_email(user)
     @user = user
-    @verification = verification
     mail(to: @user.email,
          subject: 'Confirm your Account')
   end

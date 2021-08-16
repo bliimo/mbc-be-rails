@@ -28,13 +28,25 @@ class Api::V2::AuthController < Api::V2::ApiController
     user.role = "Player"
     user.status = "Active"
     if user.save 
+      user.generate_verification_code
       if params[:image].present? 
         user.image = base64_to_file(params[:image])
         user.save
       end
+      UserNotifierMailer.send_confirmation_email(user).deliver
       render json: {user: user.as_json(User.serializer), token: encode_token({ id: user.id }) }
     else
       render json: user.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
+  def resend_confirmation_email
+    user = User.find_by(email: params[:email])
+    if user.verified_at.present?
+      render json: {message: "User is already verified"}, status: :unprocessable_entity
+    else
+      UserNotifierMailer.send_confirmation_email(user).deliver
+      render json: {message: "Email resent"}
     end
   end
 

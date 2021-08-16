@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       post 'auth/login'
       get 'auth/profile'
       post 'auth/register'
+      post 'auth/resend_confirmation_email'
       post 'auth/forgot_password'
       post 'auth/resend_forgot_password_code'
       post 'auth/verify_forgot_password_code'
