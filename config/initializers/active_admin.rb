@@ -242,6 +242,7 @@ ActiveAdmin.setup do |config|
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
       menu.add label: "Games", priority: 1
+      menu.add label: "Settings", priority: 11
     end
   end
 
