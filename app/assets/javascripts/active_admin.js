@@ -16,3 +16,18 @@ jQuery(function() {
   $(".station_city_select").select2()
   
 })
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  $("#notify-user").on("change", (e) => {
+    const checked = $("#notify-user").is(':checked')
+    console.log({checked})
+    if(checked){
+      $("#force-update").removeClass("hide")
+    }else{
+      $("#force-update").addClass("hide")
+    }
+  })
+  
+});

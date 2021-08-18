@@ -4,9 +4,9 @@
 // @import "arctic_admin/base";
 $primary-color: #00b5fd;
 @import "arctic_admin/base"; 
-
 @import "select2";
 @import "select2-bootstrap";
+@import "switch"; 
 
 
 .status_tag{
@@ -105,3 +105,26 @@ $primary-color: #00b5fd;
 .text-success{
   color: rgb(0, 146, 0) !important
 }
+
+.version-manager-form{
+
+  h3{
+    margin-bottom: 12px;
+  }
+
+  .column{
+    width: 50%;
+  }
+
+  .version_manager_submit{
+    padding: 10px !important;
+    display: inline-block !important;
+    margin-top: 12px;
+    width: 200px !important;
+  }
+}
+
+.hide{
+  display: none
+}
+

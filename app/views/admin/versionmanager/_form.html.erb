@@ -1,0 +1,39 @@
+<% version.errors.full_messages.each do |error| %>
+  <p class='error-message'><%= error %></p>
+<% end %>
+<%= form_with model: version, url: admin_versionmanager_update_path, method: :post, class: 'version-manager-form', local: true do |form| %>
+  <div class="columns">
+    <div class="column" style="padding-right: 12px">
+      <h3 for="" class="label">App Version</h3><br/>
+      <label for="" class="label">Build No</label>
+      <%= form.text_field :build_code %>
+      <small>Input the build number of the app that you want the user to be notice with.</small>
+      <div style="margin: 12px 0">
+        <label class="switch">
+          <input type="checkbox" id="notify-user" <%= version.update_type != "No notice" ? "checked" : "" %> name="mobile_release[notify_update]">
+          <span class="slider round"></span>
+        </label>
+        Turn this on to notify the users for a new update
+      </div>
+      <div style="margin: 12px 0" id="force-update" class="<%= version.update_type == "No notice" ? "hide" : "" %>"  >
+        <label class="switch">
+          <input type="checkbox" <%= version.update_type == "Force update" ? "checked" : "" %> name="mobile_release[force_update]">
+          <span class="slider round"></span>
+        </label>
+        Turn this on to force the users to update the app
+      </div>
+    </div>
+    <div class="column" style="padding-left: 12px">
+      <h3 for="" class="label">Maintenance Mode</h3><br/>
+      <div>
+        <label class="switch">
+          <input type="checkbox" <%= version.maintenance_mode ? "checked" : "" %> name="mobile_release[maintenance_mode]">
+          <span class="slider round"></span>
+        </label>
+        Turn this on to enable maintenance mode
+      </div>
+    </div>
+
+  </div>
+  <%= form.submit "Submit", class: 'version_manager_submit' %>
+<% end %>

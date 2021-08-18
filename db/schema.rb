@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_17_060938) do
+ActiveRecord::Schema.define(version: 2021_08_18_070158) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -83,10 +83,7 @@ ActiveRecord::Schema.define(version: 2021_08_17_060938) do
 
   create_table "mobile_releases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "build_code"
-    t.integer "android_update_type"
-    t.integer "ios_update_type"
-    t.integer "android_number_of_installs"
-    t.integer "ios_number_of_installs"
+    t.integer "update_type"
     t.boolean "maintenance_mode"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
