@@ -12,17 +12,21 @@ class User < ApplicationRecord
   has_one_attached :image
   before_validation :generate_confirmation_token
 
-  enum gender: %w[Male Female]
+  enum gender: %w[Male Female Undisclosed]
   enum role: %w[Player]
   enum status: %w[Active Inactive]
+  enum login_type: %w[Email Facebook Google Apple]
 
-  validates :confirmation_token, presence: true, uniqueness: { case_sensitive: false }
-  validates :username, presence: true, uniqueness: { case_sensitive: false }
-  validates :contact_number, presence: true
-  validates :first_name, presence: true
-  validates :last_name, presence: true
-  validates :birthday, presence: true
+  # validates :confirmation_token, presence: true, uniqueness: { case_sensitive: false }
+  # validates :username, presence: true, uniqueness: { case_sensitive: false }
+  # validates :contact_number, presence: true
+  # validates :first_name, presence: true
+  # validates :last_name, presence: true
+  # validates :birthday, presence: true
 
+  def verified?
+    verified_at.present? ? "Verified" : "Unverified"
+  end
   def image_path
     return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true) if image.attached?
   end
@@ -43,9 +47,12 @@ class User < ApplicationRecord
     false
   end
 
+  def email_required?
+    return login_type == "Email"
+  end
+
   def password_required?
     return false
-    # return false if skip_password_validation
     super
   end
 

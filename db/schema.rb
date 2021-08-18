@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_06_032823) do
+ActiveRecord::Schema.define(version: 2021_08_17_060938) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -223,6 +223,8 @@ ActiveRecord::Schema.define(version: 2021_08_06_032823) do
     t.integer "province_id"
     t.integer "city_id"
     t.string "last_name"
+    t.integer "login_type", default: 0
+    t.string "auth_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

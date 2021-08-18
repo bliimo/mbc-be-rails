@@ -124,7 +124,7 @@ class Api::V1::AuthController < Api::V1::ApiController
     response = decoded.first
 
     return render json: {message: "Invalid token", decoded: decoded}, status: :unprocessable_entity if response.blank?
-    user = MbcUser.find_by(email: response["email"])
+    user = MbcUser.where(email: response["email"]).last
     if user.present?
       tokens = Token.where(user_id: user.id)
       if tokens.count > 0

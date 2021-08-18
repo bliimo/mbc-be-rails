@@ -1,17 +1,18 @@
 class Api::V2::AuthController < Api::V2::ApiController
+  require 'open-uri'
   include ImagesHelper
 
   before_action :require_user_login, only: [:profile]
 
   def connection_test
     Rails.logger.debug "connection test action"
-    user = User.find_by(email: "wasayuda@mailinator.com")
+    user = User.where(login_type: "Email").find_by(email: "wasayuda@mailinator.com")
     UserNotifierMailer.send_verification_code(user, request).deliver
     render json: { message: 'yep its working', user: user }, status: :ok
   end
 
   def login
-    user = User.find_by(email: params[:email])
+    user = User.where(login_type: "Email").find_by(email: params[:email])
     if user.present? && user.valid_password?(params[:password])
       unless user.status == 'Active'
         render json: { message: 'Your account is inactive.' }, status: :unauthorized
@@ -23,10 +24,139 @@ class Api::V2::AuthController < Api::V2::ApiController
     end
   end
 
+  def login_with_facebook
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    
+    result = JSON.parse Net::HTTP.get(URI.parse("https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture.type(large)&access_token=#{access_token}"))
+    return render json: {message: "Invalid access key", fb_response: result}, status: :unprocessable_entity if result["error"].present?
+    # return render json: result
+    user = User.where(login_type: "Facebook").find_by(auth_id: result["id"])
+    if user.present?
+      unless user.status == 'Active'
+        render json: { message: 'Your account is inactive.' }, status: :unauthorized
+        return
+      end
+      render json: { user: user.as_json(methods: :image_path), result: result, token: encode_token({ id: user.id }) }, status: :ok
+    else
+      user = User.new(
+        email: result['email'],
+        first_name: result["first_name"],
+        last_name: result["last_name"],
+        gender: "Undisclosed",
+        country: "Philippines",
+        region_id: 1,
+        province_id: 1,
+        city_id: 1,
+        status: "Active",
+        login_type: "Facebook",
+        auth_id: result["id"],
+        verified_at: DateTime.now
+      )
+      if user.save 
+        user.image.attach({
+          io: URI.open(result["picture"]["data"]["url"]),
+          filename: "#{DateTime.now.to_i}_facebook_image.jpg"
+        })
+        render json: { user: user.as_json(methods: :image_path), result: result, token: encode_token({ id: user.id }) }, status: :ok
+      else
+        render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def login_with_google
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    decoded = JWT.decode(access_token, nil, false)
+    result = decoded.first
+    return render json: {message: "Invalid token", decoded: decoded}, status: :unprocessable_entity if result.blank?
+
+    user = User.where(login_type: "Google").find_by(email: result["email"])
+    if user.present?
+      unless user.status == 'Active'
+        render json: { message: 'Your account is inactive.' }, status: :unauthorized
+        return
+      end
+      render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+    else
+      user = User.new(
+        email: result['email'],
+        first_name: result["given_name"],
+        last_name: result["family_name"],
+        gender: "Undisclosed",
+        country: "Philippines",
+        region_id: 1,
+        province_id: 1,
+        city_id: 1,
+        status: "Active",
+        login_type: "Google",
+        auth_id: result["id"],
+        verified_at: DateTime.now
+      )
+
+      if user.save
+        user.image.attach({
+          io: URI.open(result["picture"]),
+          filename: "#{DateTime.now.to_i}_google_image.jpg"
+        })
+        render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+      else
+        render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+      end
+    end
+  end
+
+  def login_with_apple
+
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    decoded = JWT.decode(access_token, nil, false)
+    result = decoded.first
+    return render json: {message: "Invalid token", decoded: decoded}, status: :unprocessable_entity if result.blank?
+
+    user = MbcUser.where(login_type: "Apple").find_by(email: result["email"])
+    
+    if user.present?
+      unless user.status == 'Active'
+        render json: { message: 'Your account is inactive.' }, status: :unauthorized
+        return
+      end
+      render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+    else
+      user = User.new(
+        email: result['email'],
+        first_name: params["first_name"],
+        last_name: params["last_name"],
+        gender: "Undisclosed",
+        country: "Philippines",
+        region_id: 1,
+        province_id: 1,
+        city_id: 1,
+        status: "Active",
+        login_type: "Apple",
+        auth_id: result["id"],
+        verified_at: DateTime.now
+      )
+
+      if user.save
+        
+        render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+      else
+        render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+      end
+    end
+
+  end
+
+
   def register
     user = User.new(user_params)
     user.role = "Player"
     user.status = "Active"
+    
+    binding.pry
+    
     if user.save 
       user.generate_verification_code
       if params[:image].present? 
