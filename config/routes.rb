@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       post 'auth/verify_forgot_password_code'
       post 'auth/change_password'
       patch 'profile/update_profile'
+      get 'latest_version' => 'version_checker#latest_version'
       
       resources :locations do 
         collection do
