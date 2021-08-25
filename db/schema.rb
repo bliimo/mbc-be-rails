@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_24_015753) do
+ActiveRecord::Schema.define(version: 2021_08_25_022157) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -183,6 +183,28 @@ ActiveRecord::Schema.define(version: 2021_08_24_015753) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "radio_station_id", null: false
+    t.boolean "location_restriction"
+    t.integer "city_id"
+    t.integer "location_restriction_type"
+    t.text "text_description"
+    t.integer "dj_id"
+    t.integer "sponsor_id"
+    t.string "name"
+    t.integer "number_of_winner"
+    t.string "price"
+    t.datetime "schedule"
+    t.text "redemption_details"
+    t.string "dti_permit"
+    t.string "winner_prompt"
+    t.boolean "popper_visible"
+    t.boolean "banderitas_visible"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["radio_station_id"], name: "index_roulettes_on_radio_station_id"
+  end
+
   create_table "user_notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
     t.bigint "notification_id", null: false
@@ -248,5 +270,6 @@ ActiveRecord::Schema.define(version: 2021_08_24_015753) do
   add_foreign_key "radio_stations", "admin_users"
   add_foreign_key "radio_stations", "cities"
   add_foreign_key "radio_stations", "networks"
+  add_foreign_key "roulettes", "radio_stations"
   add_foreign_key "user_notifications", "notifications"
 end

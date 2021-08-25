@@ -1,5 +1,5 @@
 ActiveAdmin.register QuizGame do
-  menu parent: ["Games"], priority: 1
+  menu parent: ["Games"], priority: 2
 
   permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, 
                 :price, :number_of_winner, :schedule, :status, :image,

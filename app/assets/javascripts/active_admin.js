@@ -14,7 +14,8 @@ jQuery(function() {
   $("#user_city_id").select2()
   $("#radio_station_city_id").select2()
   $(".station_city_select").select2()
-  
+  $("#roulette_city_id").select2()
+  $("#roulette_radio_station_id").select2()
 })
 
 

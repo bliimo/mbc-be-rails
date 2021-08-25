@@ -1,0 +1,37 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  radio_station: one
+  location_restriction: false
+  city_id: 1
+  location_restriction_type: 1
+  text_description: MyText
+  dj_id: 1
+  sponsor_id: 1
+  name: MyString
+  number_of_winner: 1
+  price: MyString
+  schedule: 2021-08-25 02:21:57
+  redemption_details: MyText
+  dti_permit: MyString
+  winner_prompt: MyString
+  popper_visible: false
+  banderitas_visible: false
+
+two:
+  radio_station: two
+  location_restriction: false
+  city_id: 1
+  location_restriction_type: 1
+  text_description: MyText
+  dj_id: 1
+  sponsor_id: 1
+  name: MyString
+  number_of_winner: 1
+  price: MyString
+  schedule: 2021-08-25 02:21:57
+  redemption_details: MyText
+  dti_permit: MyString
+  winner_prompt: MyString
+  popper_visible: false
+  banderitas_visible: false
