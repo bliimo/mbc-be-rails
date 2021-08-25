@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_18_070158) do
+ActiveRecord::Schema.define(version: 2021_08_24_015753) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -164,7 +164,7 @@ ActiveRecord::Schema.define(version: 2021_08_18_070158) do
     t.bigint "city_id", null: false
     t.string "name"
     t.text "description"
-    t.decimal "frequency", precision: 10
+    t.decimal "frequency", precision: 8, scale: 2
     t.string "audio_streaming_link"
     t.string "video_string_link"
     t.integer "status"
@@ -222,6 +222,19 @@ ActiveRecord::Schema.define(version: 2021_08_18_070158) do
     t.string "last_name"
     t.integer "login_type", default: 0
     t.string "auth_id"
+    t.string "token"
+    t.datetime "last_login"
+    t.string "manufacturer"
+    t.string "device_id"
+    t.string "device_name"
+    t.string "brand"
+    t.string "ip_address"
+    t.string "model"
+    t.string "mac_address"
+    t.string "carrier"
+    t.string "system_version"
+    t.integer "online_status", default: 0
+    t.datetime "last_online"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

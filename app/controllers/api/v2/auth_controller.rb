@@ -2,13 +2,14 @@ class Api::V2::AuthController < Api::V2::ApiController
   require 'open-uri'
   include ImagesHelper
 
-  before_action :require_user_login, only: [:profile]
+  before_action :require_user_login, only: [:profile, :logout]
 
   def connection_test
     Rails.logger.debug "connection test action"
-    user = User.where(login_type: "Email").find_by(email: "wasayuda@mailinator.com")
-    UserNotifierMailer.send_verification_code(user, request).deliver
-    render json: { message: 'yep its working', user: user }, status: :ok
+    UserChannel.broadcast_to(
+      User.find(21),
+      { type: "LOGOUT"}
+    )
   end
 
   def login
@@ -18,7 +19,7 @@ class Api::V2::AuthController < Api::V2::ApiController
         render json: { message: 'Your account is inactive.' }, status: :unauthorized
         return
       end
-      render json: { user: user, token: encode_token({ id: user.id }) }, status: :ok
+      handle_valid_credential(user)
     else
       render json: { message: 'Log in failed! Invalid email or password.' }, status: :unauthorized
     end
@@ -37,7 +38,7 @@ class Api::V2::AuthController < Api::V2::ApiController
         render json: { message: 'Your account is inactive.' }, status: :unauthorized
         return
       end
-      render json: { user: user.as_json(methods: :image_path), result: result, token: encode_token({ id: user.id }) }, status: :ok
+      handle_valid_credential(user)
     else
       user = User.new(
         email: result['email'],
@@ -58,7 +59,7 @@ class Api::V2::AuthController < Api::V2::ApiController
           io: URI.open(result["picture"]["data"]["url"]),
           filename: "#{DateTime.now.to_i}_facebook_image.jpg"
         })
-        render json: { user: user.as_json(methods: :image_path), result: result, token: encode_token({ id: user.id }) }, status: :ok
+        handle_valid_credential(user)
       else
         render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
       end
@@ -78,7 +79,7 @@ class Api::V2::AuthController < Api::V2::ApiController
         render json: { message: 'Your account is inactive.' }, status: :unauthorized
         return
       end
-      render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+      handle_valid_credential(user)
     else
       user = User.new(
         email: result['email'],
@@ -100,7 +101,7 @@ class Api::V2::AuthController < Api::V2::ApiController
           io: URI.open(result["picture"]),
           filename: "#{DateTime.now.to_i}_google_image.jpg"
         })
-        render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+        handle_valid_credential(user)
       else
         render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
       end
@@ -115,14 +116,14 @@ class Api::V2::AuthController < Api::V2::ApiController
     result = decoded.first
     return render json: {message: "Invalid token", decoded: decoded}, status: :unprocessable_entity if result.blank?
 
-    user = MbcUser.where(login_type: "Apple").find_by(email: result["email"])
+    user = User.where(login_type: "Apple").find_by(email: result["email"])
     
     if user.present?
       unless user.status == 'Active'
         render json: { message: 'Your account is inactive.' }, status: :unauthorized
         return
       end
-      render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+      handle_valid_credential(user)
     else
       user = User.new(
         email: result['email'],
@@ -140,22 +141,18 @@ class Api::V2::AuthController < Api::V2::ApiController
       )
 
       if user.save
-        
-        render json: { user: user.as_json(methods: :image_path), token: encode_token({ id: user.id }) }, status: :ok
+        handle_valid_credential(user)
       else
         render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
       end
     end
-
   end
-
 
   def register
     user = User.new(user_params)
     user.role = "Player"
     user.status = "Active"
     
-    binding.pry
     
     if user.save 
       user.generate_verification_code
@@ -164,7 +161,8 @@ class Api::V2::AuthController < Api::V2::ApiController
         user.save
       end
       UserNotifierMailer.send_confirmation_email(user).deliver
-      render json: {user: user.as_json(User.serializer), token: encode_token({ id: user.id }) }
+      handle_valid_credential(user)
+      
     else
       render json: user.errors.full_messages, status: :unprocessable_entity
     end
@@ -187,6 +185,12 @@ class Api::V2::AuthController < Api::V2::ApiController
         include: [],
         status: :ok
       )
+  end
+
+  def logout
+    user = session_user
+    user.token = nil
+    user.save
   end
 
   def verify_code
@@ -295,5 +299,36 @@ class Api::V2::AuthController < Api::V2::ApiController
       :city_id,
       :password
     )
+  end
+
+  def device_info_params
+    params.require(:device_info).permit(
+      :manufacturer,
+      :device_id,
+      :device_name,
+      :brand,
+      :ip_address,
+      :model,
+      :mac_address,
+      :carrier,
+      :system_version,
+    )
+  end
+
+  def handle_valid_credential(user)
+    token = encode_token({ id: user.id, time: Time.now.to_i })
+    if user.token.blank? || params[:login_type] == "OVERRIDE_TOKEN"
+      user.token = token
+      
+      user.last_login = DateTime.now
+      user.update(device_info_params)
+      render json: { user: user.as_json(methods: :image_path), token: token }, status: :ok
+      UserChannel.broadcast_to(
+        user,
+        { type: "LOGOUT", token: user.token}
+      )
+    else
+      render json: {type: "ALREADY_LOGGED_IN", message: "You are currently logged in another device"}, status: :unauthorized
+    end
   end
 end

@@ -68,6 +68,7 @@ Rails.application.routes.draw do
       post 'auth/login_with_google'
       post 'auth/login_with_apple'
       get 'auth/profile'
+      delete 'auth/logout'
       post 'auth/register'
       post 'auth/resend_confirmation_email'
       post 'auth/forgot_password'

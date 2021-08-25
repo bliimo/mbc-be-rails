@@ -10,7 +10,7 @@ $primary-color: #00b5fd;
 
 
 .status_tag{
-  &.active, &.verified{
+  &.active, &.verified, &.online{
     background-color: green;
   }
   &.inactive, &.unverified, &.google{

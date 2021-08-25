@@ -11,9 +11,12 @@ class Api::V2::ApiController < ApplicationController
     request.headers['Authorization']
   end
 
+  def token
+    auth_header.split(' ')[1]
+  end
+
   def decoded_token
     if auth_header
-      token = auth_header.split(' ')[1]
       begin
         JWT.decode(token, 'pngtek_solutions_2020', true, algorithm: 'HS256')
       rescue JWT::DecodeError
@@ -29,6 +32,9 @@ class Api::V2::ApiController < ApplicationController
     unless decoded_hash.empty?
       user_id = decoded_hash[0]['id']
       @user = User.find_by(id: user_id)
+      if @user.token == token
+        return @user
+      end
     end
   end
 

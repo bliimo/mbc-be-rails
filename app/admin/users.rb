@@ -23,6 +23,16 @@ ActiveAdmin.register User do
     resource.save
     redirect_to resource_path, notice: "Verified"
   end
+
+  member_action :logged_out, method: :post do
+    resource.token = nil
+    resource.save
+    UserChannel.broadcast_to(
+        resource,
+        { type: "LOGOUT", token: resource.token}
+      )
+    redirect_to resource_path, notice: "User successfully logged out"
+  end
   
   member_action :unverify, method: :post do
     resource.verified_at = nil
@@ -40,7 +50,17 @@ ActiveAdmin.register User do
       user.name
     end
     column :gender
-    column :birthday
+    column :online_status do |user|
+      if user.online_status == "Online"
+        status_tag user.online_status
+      else
+        if user.last_online.present?
+          span "Last online: #{format_date user.last_online} #{format_time user.last_online}"
+        else
+          status_tag user.online_status
+        end
+      end
+    end
     column :login_type do |user|
       status_tag user.login_type
     end
@@ -109,6 +129,12 @@ ActiveAdmin.register User do
                 row :status do
                   status_tag user.status.present? ? user.status : 'Inactive'
                 end
+                row :online_status do
+                  status_tag user.online_status
+                  if user.online_status == "Offline" && user.last_online.present?
+                    span "Last online: #{format_time user.last_online} #{format_date user.last_online}"
+                  end
+                end
               end
             end
             if user.image.attached?
@@ -118,7 +144,25 @@ ActiveAdmin.register User do
             end
           end
         end
-
+        tab 'Login Information' do
+          attributes_table_for user do
+            row :token do 
+              span user.token 
+              br
+              a "Logout", href: logged_out_admin_user_path(user.id), "data-method": :post, rel: 'nofollow', class: 'text-success'
+            end
+            row :last_login
+            row :manufacturer
+            row :device_id
+            row :device_name
+            row :brand
+            row :ip_address
+            row :model
+            row :mac_address
+            row :carrier
+            row :system_version
+          end
+        end
       end
     end
   end
