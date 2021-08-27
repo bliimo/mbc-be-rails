@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_25_022157) do
+ActiveRecord::Schema.define(version: 2021_08_26_055232) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
@@ -71,6 +71,13 @@ ActiveRecord::Schema.define(version: 2021_08_25_022157) do
     t.index ["province_id"], name: "index_cities_on_province_id"
   end
 
+  create_table "cities_roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "roulette_id"
+    t.bigint "city_id"
+    t.index ["city_id"], name: "index_cities_roulettes_on_city_id"
+    t.index ["roulette_id"], name: "index_cities_roulettes_on_roulette_id"
+  end
+
   create_table "game_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "game_id"
     t.datetime "start_time"
@@ -106,6 +113,15 @@ ActiveRecord::Schema.define(version: 2021_08_25_022157) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+  end
+
+  create_table "pies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "roulette_id", null: false
+    t.string "name"
+    t.string "color"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["roulette_id"], name: "index_pies_on_roulette_id"
   end
 
   create_table "players", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -183,10 +199,20 @@ ActiveRecord::Schema.define(version: 2021_08_25_022157) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "roulette_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "roulette_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "spin_at"
+    t.boolean "winner"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["roulette_id"], name: "index_roulette_participants_on_roulette_id"
+    t.index ["user_id"], name: "index_roulette_participants_on_user_id"
+  end
+
   create_table "roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "radio_station_id", null: false
     t.boolean "location_restriction"
-    t.integer "city_id"
     t.integer "location_restriction_type"
     t.text "text_description"
     t.integer "dj_id"
@@ -202,6 +228,8 @@ ActiveRecord::Schema.define(version: 2021_08_25_022157) do
     t.boolean "banderitas_visible"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "status", default: 0
+    t.datetime "start_time"
     t.index ["radio_station_id"], name: "index_roulettes_on_radio_station_id"
   end
 
@@ -264,12 +292,15 @@ ActiveRecord::Schema.define(version: 2021_08_25_022157) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cities", "provinces"
   add_foreign_key "networks", "admin_users"
+  add_foreign_key "pies", "roulettes"
   add_foreign_key "provinces", "regions"
   add_foreign_key "question_choices", "questions"
   add_foreign_key "questions", "quiz_games"
   add_foreign_key "radio_stations", "admin_users"
   add_foreign_key "radio_stations", "cities"
   add_foreign_key "radio_stations", "networks"
+  add_foreign_key "roulette_participants", "roulettes"
+  add_foreign_key "roulette_participants", "users"
   add_foreign_key "roulettes", "radio_stations"
   add_foreign_key "user_notifications", "notifications"
 end

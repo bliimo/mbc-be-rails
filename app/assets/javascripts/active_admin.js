@@ -4,6 +4,7 @@
 //= require select2-full
 //= require jquery
 //= require jquery_ujs
+//= require game_timer
 
 jQuery(function() { 
   $("#quiz_game_status, #quiz_game_city_id, #quiz_game_sponsor_id, #quiz_game_radio_station_id").select2({
@@ -16,6 +17,9 @@ jQuery(function() {
   $(".station_city_select").select2()
   $("#roulette_city_id").select2()
   $("#roulette_radio_station_id").select2()
+  $("#roulette_dj_id").select2()
+  $("#roulette_sponsor_id").select2()
+  $("#roulette_city_ids").select2()
 })
 
 
@@ -30,5 +34,14 @@ document.addEventListener("DOMContentLoaded", function() {
       $("#force-update").addClass("hide")
     }
   })
+
+  $("#roulette_location_restriction").on("change", (e) => {
+    if($("#roulette_location_restriction").is(':checked')){
+      $("#roullete_location_restriction").removeClass("hide")
+    }else{
+      $("#roullete_location_restriction").addClass("hide")
+    }
+  })
   
+  initTimer()
 });

@@ -1,0 +1,60 @@
+
+<% if roulette.status == "pending" %>
+  <div class="lobby-timer-container" id="timer-container">
+    <div class="timer-label">
+      TIME TO JOIN
+    </div>
+    <div>
+      <div class="timer">
+        <div>
+          <span id="timer-minutes">00</span>
+          <small>mm</small>
+        </div> <span style="margin: 12px">:</span> 
+        <div>
+          <span id="timer-seconds">00</span>
+          <small>ss</small>
+        </div>
+        <div>
+          <a href="#" id="button-up">▲</a>
+          <a href="#" id="button-down">▼</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="roulette-button-option">
+  <% if roulette.start_time.blank? %>
+    <div>
+      <a rel="nofollow" href="<%= allow_player_to_join_admin_roulette_path(roulette) %> "data-method="post" class="let-player-join-btn">Let player join</a>
+    </div>
+  <% else %>
+    <span id="countdown-timer" data-remaining-seconds="<%= roulette.remaining_seconds %>"></span>
+    <a rel="nofollow" href="<%= start_spin_admin_roulette_path(roulette) %> "data-method="post" class="">Override timer</a>
+
+  <% end %>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Join time</th>
+      <th>Status</th>
+      <th>Win Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <% roulette.roulette_participants.each do |participant| %>
+       <tr>
+        <td><%= participant.user.name %></td>
+        <td><%= format_time participant.created_at %></td>
+        <td><%= participant.status %></td>
+        <td><%= participant.win_status %></td>
+      </tr>
+    <% end %>
+    
+  </tbody>
+</table>

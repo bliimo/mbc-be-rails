@@ -1,6 +1,6 @@
 ActiveAdmin.register AdminUser do
   menu parent: 'Users'
-  permit_params :email, :name, :role, :status, :password, :password_confirmation
+  permit_params :email, :name, :role, :status, :password, :password_confirmation, :image
 
   index do
     selectable_column
@@ -24,6 +24,7 @@ ActiveAdmin.register AdminUser do
 
   form do |f|
     f.inputs do
+      f.input :image, as: :file
       f.input :email
       f.input :name
       f.input :role

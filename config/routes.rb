@@ -86,6 +86,11 @@ Rails.application.routes.draw do
         end
       end
       resources :networks, only: [:index]
+      resources :roulettes, only: [:index, :show] do
+        member do 
+          post :spin_game
+        end
+      end
 
     end
     namespace :v1 do
