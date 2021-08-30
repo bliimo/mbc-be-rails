@@ -15,7 +15,7 @@ class Api::V2::RoulettesController < Api::V2::ApiController
     )
     GameChannel.broadcast_to(
       @roulette,
-      { type: "PLAYER_JOIN", participant: participant.as_json(include: :user, methods: [:status, :win_status])}
+      { type: "PLAYER_JOIN", participants: @roulette.roulette_participants.as_json(include: :user, methods: [:status, :win_status])}
     )
     render json: @roulette.as_json(Roulette.serializer), status: :ok
   end
@@ -30,7 +30,7 @@ class Api::V2::RoulettesController < Api::V2::ApiController
       
       GameChannel.broadcast_to(
         @roulette,
-        { type: "PLAYER_SPIN", participant: participant.as_json(include: :user, methods: [:status, :win_status])}
+        { type: "PLAYER_SPIN", participants: @roulette.roulette_participants.as_json(include: :user, methods: [:status, :win_status])}
       )
       render json: participant, status: :ok
     else

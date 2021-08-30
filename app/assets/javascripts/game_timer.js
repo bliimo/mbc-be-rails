@@ -22,6 +22,22 @@ const initTimer = () => {
   }
 }
 
+
+const renderParticipantRow = (participants) => {
+  let content = ""
+  participants.map(item => {
+    content = content + `
+    <tr>
+      <td>${item.user.first_name + " " + item.user.last_name}</td>
+      <td>${new Date(item.user.created_at).toLocaleTimeString()}</td>
+      <td>${item.status}</td>
+      <td>${item.win_status}</td>
+    </tr>
+    `
+  })
+  $("#participants-content").html(content)
+}
+
 const initGameSocketListener = () => {
   const gameId = $("#game_id").val()
   if(gameId) {
@@ -47,7 +63,10 @@ const initGameSocketListener = () => {
       }
       console.log({msg});
       if (msg.message?.type == 'PLAYER_JOIN') {
-       
+        renderParticipantRow(msg.message.participants)
+      }
+      if (msg.message?.type == 'PLAYER_SPIN') {
+        renderParticipantRow(msg.message.participants)
       }
       if (msg.message?.type == 'FINISHED') {
         window.location.reload();
@@ -65,6 +84,7 @@ const initGameSocketListener = () => {
   }
   
 }
+
 
 const renderClock = () => {
 

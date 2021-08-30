@@ -50,14 +50,6 @@
       <th>Win Status</th>
     </tr>
   </thead>
-  <tbody>
-    <% roulette.roulette_participants.each do |participant| %>
-      <tr>
-        <td><%= participant.user.name %></td>
-        <td><%= format_time participant.created_at %></td>
-        <td><%= participant.status %></td>
-        <td><%= participant.win_status %></td>
-      </tr>
-    <% end %>
+  <tbody id="participants-content">
   </tbody>
 </table>
