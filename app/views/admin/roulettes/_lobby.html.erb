@@ -1,4 +1,4 @@
-
+<input type="hidden" value="<%= roulette.id %>" id="game_id">
 <% if roulette.status == "pending" %>
   <div class="lobby-timer-container" id="timer-container">
     <div class="timer-label">
@@ -9,7 +9,8 @@
         <div>
           <span id="timer-minutes">00</span>
           <small>mm</small>
-        </div> <span style="margin: 12px">:</span> 
+        </div>
+        <span style="margin: 12px">:</span>
         <div>
           <span id="timer-seconds">00</span>
           <small>ss</small>
@@ -22,20 +23,24 @@
     </div>
   </div>
 <% end %>
-
-
 <div class="roulette-button-option">
-  <% if roulette.start_time.blank? %>
-    <div>
-      <a rel="nofollow" href="<%= allow_player_to_join_admin_roulette_path(roulette) %> "data-method="post" class="let-player-join-btn">Let player join</a>
-    </div>
-  <% else %>
-    <span id="countdown-timer" data-remaining-seconds="<%= roulette.remaining_seconds %>"></span>
-    <a rel="nofollow" href="<%= start_spin_admin_roulette_path(roulette) %> "data-method="post" class="">Override timer</a>
-
-  <% end %>
+  <% case roulette.status  %>
+  <% when "pending" %>
+  <div>
+    <%= form_with url: allow_player_to_join_admin_roulette_path(roulette), method: :post, local: true do |form| %>
+      <%= form.hidden_field  :seconds, value: 60, id: "input-seconds" %>
+      <%= form.submit "Let player join", class: "let-player-join-btn" %>
+    <% end %>
+  </div>
+  <% when "ready" %>
+  <span id="countdown-timer" data-remaining-seconds="<%= roulette.remaining_seconds %>"></span>
+  <%= link_to 'Override timer', start_spin_admin_roulette_path(roulette), method: :post, local: false, id: "start-game-btn" %>
+  <% when "in_progress" %>
+  <span>Game is in progress..</span>
+  <% when "done" %>
+  <span>Game is finished..</span>
+<% end %>
 </div>
-
 <table>
   <thead>
     <tr>
@@ -46,15 +51,13 @@
     </tr>
   </thead>
   <tbody>
-    
     <% roulette.roulette_participants.each do |participant| %>
-       <tr>
+      <tr>
         <td><%= participant.user.name %></td>
         <td><%= format_time participant.created_at %></td>
         <td><%= participant.status %></td>
         <td><%= participant.win_status %></td>
       </tr>
     <% end %>
-    
   </tbody>
 </table>

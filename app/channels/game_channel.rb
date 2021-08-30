@@ -1,6 +1,6 @@
 class GameChannel < ApplicationCable::Channel
   def subscribed
-    stream_for params[:game_id]
+    stream_for Roulette.find(params[:id])
   end
 
   def unsubscribed

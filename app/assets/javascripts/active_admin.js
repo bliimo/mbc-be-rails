@@ -43,5 +43,5 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   })
   
-  initTimer()
+  initLobby()
 });

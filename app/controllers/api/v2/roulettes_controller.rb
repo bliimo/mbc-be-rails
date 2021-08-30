@@ -13,6 +13,10 @@ class Api::V2::RoulettesController < Api::V2::ApiController
       roulette_id: @roulette.id, 
       user_id: user.id
     )
+    GameChannel.broadcast_to(
+      @roulette,
+      { type: "PLAYER_JOIN", participant: participant.as_json(include: :user, methods: [:status, :win_status])}
+    )
     render json: @roulette.as_json(Roulette.serializer), status: :ok
   end
 
@@ -23,6 +27,11 @@ class Api::V2::RoulettesController < Api::V2::ApiController
     )
     participant.spin_at = DateTime.now
     if participant.save
+      
+      GameChannel.broadcast_to(
+        @roulette,
+        { type: "PLAYER_SPIN", participant: participant.as_json(include: :user, methods: [:status, :win_status])}
+      )
       render json: participant, status: :ok
     else
       render json: participant.error.full_messages, status: :unprocessable_entity

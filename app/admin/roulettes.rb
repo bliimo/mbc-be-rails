@@ -12,7 +12,7 @@ ActiveAdmin.register Roulette do
                   ]
 
   member_action :allow_player_to_join, method: [:post]  do 
-    resource.start_time = DateTime.now + 100.minutes
+    resource.start_time = DateTime.now + params[:seconds].to_i.seconds
     resource.status = "ready"
     resource.save
     redirect_to admin_roulette_path(resource), notice: "Game is ready"
@@ -20,6 +20,7 @@ ActiveAdmin.register Roulette do
 
   member_action :start_spin, method: [:post] do 
     resource.start_time = DateTime.now
+    resource.status = "in_progress"
     resource.save
 
     Rails.logger.debug "Setting countdown"
@@ -57,17 +58,17 @@ ActiveAdmin.register Roulette do
       winners = indexes.map do |item|
         players[item].winner = true
         players[item].save
+        players[item]
       end
       Rails.logger.debug "Generating Winners"
       # broadcast winner
       # Rails.logger.debug "broadcasting"
       GameChannel.broadcast_to(
-        game_params[:game_id],
-        { winners: winners, player_count: player_count, players: players}
+        resource,
+        { winners: winners, player_count: player_count, players: players, type: "FINISHED"}
       )
       resource.status = "done"
       resource.save
-
     end
   end
 
@@ -83,6 +84,19 @@ ActiveAdmin.register Roulette do
     end
   end
   
+  index do
+    selectable_column
+    id_column
+    column :name
+    column :location_restriction
+    column :dj
+    column :schedule
+    column :status do |roulette|
+      status_tag roulette.status
+    end
+    actions
+  end
+
   form do |f|
     tabs do 
       tab "Game Info" do 
@@ -141,12 +155,12 @@ ActiveAdmin.register Roulette do
               attributes_table_for roulette do
                 row :id
     
-                row :radio_station_id
+                row :radio_station
                 row :location_restriction
                 row :location_restriction_type
                 row :text_description
-                row :dj_id
-                row :sponsor_id
+                row :dj
+                row :sponsor
                 row :name
                 row :number_of_winner
                 row :price

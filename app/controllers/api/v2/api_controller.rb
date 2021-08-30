@@ -32,7 +32,7 @@ class Api::V2::ApiController < ApplicationController
     unless decoded_hash.empty?
       user_id = decoded_hash[0]['id']
       @user = User.find_by(id: user_id)
-      if @user.token == token
+      if @user&.token == token
         return @user
       end
     end

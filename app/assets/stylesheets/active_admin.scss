@@ -13,16 +13,19 @@ $side-by-side-filter-input-width: auto;
 
 
 .status_tag{
-  &.active, &.verified, &.online{
+  &.active, &.verified, &.online, &.ready{
     background-color: green;
   }
   &.inactive, &.unverified, &.google{
     background-color: red;
   }
-  &.email{
+  &.in_progress{
+    background-color: orange
+  }
+  &.email, &.done{
     background-color: rgb(135, 135, 135);
   }
-  &.facebook{
+  &.facebook, &.pending{
     background-color: blue;
   }
   &.apple{
@@ -176,12 +179,12 @@ $side-by-side-filter-input-width: auto;
 }
 
 .let-player-join-btn{
-  background-color: yellow;
+  background-color: yellow !important;
   text-align: center;
-  padding: 4px;
+  padding: 4px !important;
   color: black !important;
-  display: block;
-  width: 200px;
+  display: block !important;
+  width: 200px !important;
   margin: 25px auto
 }
 
