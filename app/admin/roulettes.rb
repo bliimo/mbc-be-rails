@@ -11,17 +11,36 @@ ActiveAdmin.register Roulette do
                     :color
                   ]
 
+  after_save do |roulette|
+    GameChannel.broadcast_to(
+      "ROULETTE",
+      {type: "GAMES_UPDATED"}
+    )
+  end
+
   member_action :allow_player_to_join, method: [:post]  do 
     resource.start_time = DateTime.now + params[:seconds].to_i.seconds
     resource.status = "ready"
     resource.save
     redirect_to admin_roulette_path(resource), notice: "Game is ready"
+    GameChannel.broadcast_to(
+      "ROULETTE",
+      {type: "GAMES_UPDATED"}
+    )
   end
 
   member_action :start_spin, method: [:post] do 
     resource.start_time = DateTime.now
     resource.status = "in_progress"
     resource.save
+    GameChannel.broadcast_to(
+      "ROULETTE",
+      {type: "GAMES_UPDATED"}
+    )
+    GameChannel.broadcast_to(
+      resource,
+      { type: "START_SPIN"}
+    )
 
     Rails.logger.debug "Setting countdown"
     time = GameRecord.lobby_time
@@ -69,6 +88,10 @@ ActiveAdmin.register Roulette do
       )
       resource.status = "done"
       resource.save
+      GameChannel.broadcast_to(
+        "ROULETTE",
+        {type: "GAMES_UPDATED"}
+      )
     end
   end
 
@@ -76,8 +99,8 @@ ActiveAdmin.register Roulette do
   controller do
     def new
       super do 
-          resource.pies << Pie.new(name: "Winner", color: "#%06x" % (rand * 0xffffff))
-          11.times do 
+        resource.pies << Pie.new(name: "Winner", color: "#%06x" % (rand * 0xffffff))
+        11.times do 
           resource.pies << Pie.new(name: "Bokya", color: "#%06x" % (rand * 0xffffff))
         end
       end
