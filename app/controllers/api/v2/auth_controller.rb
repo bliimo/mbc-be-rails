@@ -41,7 +41,7 @@ class Api::V2::AuthController < Api::V2::ApiController
       handle_valid_credential(user)
     else
       user = User.new(
-        email: result['email'],
+        email: result['email'] || "#{DateTime.now.to_i}#{Faker::Alphanumeric.alphanumeric(number: 3)}@mbc.app",
         first_name: result["first_name"],
         last_name: result["last_name"],
         gender: "Undisclosed",
@@ -61,7 +61,12 @@ class Api::V2::AuthController < Api::V2::ApiController
         })
         handle_valid_credential(user)
       else
-        render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        existing_user = User.find_by_email(result["email"])
+        if existing_user.present?
+          render json: {message: "Email has already been used in #{existing_user.login_type} login"}, status: :unprocessable_entity
+        else
+          render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -103,7 +108,12 @@ class Api::V2::AuthController < Api::V2::ApiController
         })
         handle_valid_credential(user)
       else
-        render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        existing_user = User.find_by_email(result["email"])
+        if existing_user.present?
+          render json: {message: "Email has already been used in #{existing_user.login_type} login"}, status: :unprocessable_entity
+        else
+          render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -143,7 +153,12 @@ class Api::V2::AuthController < Api::V2::ApiController
       if user.save
         handle_valid_credential(user)
       else
-        render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        existing_user = User.find_by_email(result["email"])
+        if existing_user.present?
+          render json: {message: "Email has already been used in #{existing_user.login_type} login"}, status: :unprocessable_entity
+        else
+          render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -182,7 +197,7 @@ class Api::V2::AuthController < Api::V2::ApiController
       render(
         json: session_user,
         methods: %i[image_path],
-        include: [],
+        include: [:city],
         status: :ok
       )
   end

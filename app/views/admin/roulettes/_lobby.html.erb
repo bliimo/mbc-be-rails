@@ -55,7 +55,7 @@
     <% roulette.roulette_participants.each do |participant| %>
       <tr>
         <td><%= participant.user.name %></td>
-        <td><%= participant.created_at %></td>
+        <td><%= format_time participant.created_at %></td>
         <td><%= participant.status %></td>
         <td><%= participant.win_status %></td>
       </tr>

@@ -90,6 +90,9 @@ Rails.application.routes.draw do
         member do 
           post :spin_game
         end
+        collection do
+          get :my_prices
+        end
       end
 
     end

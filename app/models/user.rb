@@ -18,6 +18,8 @@ class User < ApplicationRecord
   enum online_status: %w[Offline Online]
   enum login_type: %w[Email Facebook Google Apple]
 
+  has_many :roulette_participants, dependent: :destroy
+
   # validates :confirmation_token, presence: true, uniqueness: { case_sensitive: false }
   # validates :username, presence: true, uniqueness: { case_sensitive: false }
   # validates :contact_number, presence: true

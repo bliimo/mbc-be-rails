@@ -38,6 +38,10 @@ class Api::V2::RoulettesController < Api::V2::ApiController
     end
   end
 
+  def my_prices
+    render json: session_user.roulette_participants.wins.as_json(include: [:roulette])
+  end
+
   def start_game
 
   end
