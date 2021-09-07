@@ -78,6 +78,8 @@ Rails.application.routes.draw do
       patch 'profile/update_profile'
       get 'latest_version' => 'version_checker#latest_version'
       
+      resources :notifications, only: [:index]
+
       resources :locations do 
         collection do
           get :regions
