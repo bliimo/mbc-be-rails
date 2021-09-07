@@ -196,7 +196,7 @@ class Api::V2::AuthController < Api::V2::ApiController
   def profile
       render(
         json: session_user,
-        methods: %i[image_path],
+        methods: %i[image_path editable],
         include: [:city],
         status: :ok
       )

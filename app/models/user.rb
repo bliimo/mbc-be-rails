@@ -35,6 +35,11 @@ class User < ApplicationRecord
     return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true) if image.attached?
   end
 
+  def editable
+    return false if Roulette.all.address.available.count.positive?
+    return true
+  end
+
   def generate_verification_code
     code =  (SecureRandom.random_number(9e5) + 1e5).to_i
     count = User.where(verification_code: code).count

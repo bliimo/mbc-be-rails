@@ -11,7 +11,7 @@ class Notification < ApplicationRecord
 
   attr_accessor :current_user_id
 
-  after_create :notify_user
+  after_save :notify_user
 
   def game
     Game.find_by_game_id(game_id)
