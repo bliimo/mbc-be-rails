@@ -4,6 +4,7 @@ ActiveAdmin.register Network do
   permit_params :name, 
                 :admin_user_id, 
                 :image, 
+                :background_color, 
                 radio_stations_attributes: [
                   :id,
                   :image,
@@ -25,6 +26,7 @@ ActiveAdmin.register Network do
 
           f.input :image, as: :file
           f.input :name
+          f.input :background_color
           f.input :admin_user
 
       end
@@ -60,6 +62,7 @@ ActiveAdmin.register Network do
               attributes_table_for network do
                 row :id
                 row :name
+                row :background_color
                 row :assigned_to do 
                   network.admin_user
                 end

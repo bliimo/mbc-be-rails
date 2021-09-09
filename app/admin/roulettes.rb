@@ -3,7 +3,7 @@ ActiveAdmin.register Roulette do
 
   permit_params :radio_station_id, :location_restriction, :location_restriction_type, :text_description, :dj_id, 
                 :sponsor_id, :name, :number_of_winner, :price, :schedule, :redemption_details, :dti_permit, :winner_prompt, 
-                :popper_visible, :banderitas_visible, :background, :winner_background, :status, city_ids: [],
+                :popper_visible, :banderitas_visible, :background, :banner, :winner_background, :status, city_ids: [],
                 pies_attributes: [
                     :id,
                     :icon,
@@ -138,6 +138,7 @@ ActiveAdmin.register Roulette do
         f.input :price
         f.input :background, as: :file
         f.input :winner_background, as: :file
+        f.input :banner, as: :file
         
         f.input :schedule, :as => :datetime_picker
         f.input :redemption_details, input_html: {rows: 2}
@@ -209,14 +210,22 @@ ActiveAdmin.register Roulette do
               if roulette.background.attached?
                 img src: url_for(roulette.background), style: 'width: 100%'
               else
-                "No background image"
+                small "No background image"
               end
+              br
 
               para "Winner Background"
               if roulette.winner_background.attached?
                 img src: url_for(roulette.winner_background), style: 'width: 100%'
               else
-                "No winner background image"
+                small "No winner background image"
+              end
+              br
+              para "Banner"
+              if roulette.banner.attached?
+                img src: url_for(roulette.banner), style: 'width: 100%'
+              else
+                small "No banner"
               end
             end
 
