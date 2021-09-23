@@ -236,7 +236,7 @@ class Api::V2::AuthController < Api::V2::ApiController
   end
 
   def forgot_password
-    user = User.find_by(email: params[:email])
+    user = User.where(login_type: 'email').find_by(email: params[:email])
     if user.present?
       user.generate_verification_code
       user.save(validate: false)

@@ -7,8 +7,8 @@ class RouletteParticipant < ApplicationRecord
   
   def status
     return "Did not spin" if spin_at.blank?
-    return "Spin Successful (#{spin_at.strftime("%I:%M:%S %p")})" if !winner.nil? || roulette.status != "done"
-    return "Late spin"
+    return "Late spin (#{spin_at.strftime("%I:%M:%S %p")})" if spin_at > ((roulette.start_time || DateTime.new))
+    return "Spin Successful (#{spin_at.strftime("%I:%M:%S %p")})"
   end
 
   def win_status

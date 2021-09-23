@@ -14,7 +14,9 @@ class Network < ApplicationRecord
       include: [
         {
           radio_stations: {
-            include: [],
+            include: [
+              :city
+            ],
             methods: [:image_path]
           }
         }

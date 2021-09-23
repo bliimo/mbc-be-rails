@@ -25,9 +25,8 @@ class Api::V2::RoulettesController < Api::V2::ApiController
       roulette_id: @roulette.id,
       user_id: session_user.id
     )
-    participant.spin_at = DateTime.now
+    participant.spin_at = DateTime.now if participant.spin_at.blank?
     if participant.save
-      
       GameChannel.broadcast_to(
         @roulette,
         { type: "PLAYER_SPIN", participants: @roulette.roulette_participants.as_json(include: :user, methods: [:status, :win_status])}

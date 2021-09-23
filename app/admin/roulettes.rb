@@ -30,7 +30,6 @@ ActiveAdmin.register Roulette do
   end
 
   member_action :start_spin, method: [:post] do 
-    resource.start_time = DateTime.now
     resource.status = "in_progress"
     resource.save
     GameChannel.broadcast_to(
@@ -43,7 +42,7 @@ ActiveAdmin.register Roulette do
     )
 
     Rails.logger.debug "Setting countdown"
-    time = GameRecord.lobby_time
+    time = Roulette.lobby_time
     Rails.logger.debug time.to_s
     redirect_to admin_roulette_path(resource), notice: "Game is in progress"
     
@@ -86,6 +85,7 @@ ActiveAdmin.register Roulette do
         resource,
         { winners: winners, player_count: player_count, players: players, type: "FINISHED"}
       )
+      resource.start_time = DateTime.now
       resource.status = "done"
       resource.save
       GameChannel.broadcast_to(
@@ -144,8 +144,8 @@ ActiveAdmin.register Roulette do
         f.input :redemption_details, input_html: {rows: 2}
         f.input :dti_permit
         f.input :winner_prompt
-        f.input :popper_visible
-        f.input :banderitas_visible
+        f.input :popper_visible, input_html: {checked: f.object.new_record? ? true : f.object.popper_visible} 
+        f.input :banderitas_visible, input_html: {checked: f.object.new_record? ? true : f.object.banderitas_visible} 
         f.input :status
 
       end

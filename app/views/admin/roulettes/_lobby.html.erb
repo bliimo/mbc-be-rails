@@ -38,7 +38,7 @@
   <% when "in_progress" %>
   <span>Game is in progress..</span>
   <% when "done" %>
-  <span>Game is finished..</span>
+  <span>Game ended at <%= roulette.start_time&.strftime("%r") %>, <%= roulette.start_time&.strftime("%D") %></span>
 <% end %>
 </div>
 <table>
@@ -54,7 +54,7 @@
     
     <% roulette.roulette_participants.each do |participant| %>
       <tr>
-        <td><%= participant.user.name %></td>
+        <td><%= link_to participant.user.name, admin_user_path(participant.user) %></td>
         <td><%= format_time participant.created_at %></td>
         <td><%= participant.status %></td>
         <td><%= participant.win_status %></td>
