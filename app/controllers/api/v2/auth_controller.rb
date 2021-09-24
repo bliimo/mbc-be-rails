@@ -236,14 +236,17 @@ class Api::V2::AuthController < Api::V2::ApiController
   end
 
   def forgot_password
-    user = User.where(login_type: 'email').find_by(email: params[:email])
+    user = User.find_by(email: params[:email])
     if user.present?
+      if user.login_type != 'email' 
+        return render json: { message: "Email was used in #{user.login_type} login" }, status: :unprocessable_entity
+      end
       user.generate_verification_code
       user.save(validate: false)
       UserNotifierMailer.send_verification_code(user, request).deliver
       render json: { message: 'Verification code has been successfully sent!' }, status: :ok
     else
-      render json: { message: 'No user found' }, status: :unprocessable_entity
+      render json: { message: 'Email is not valid' }, status: :unprocessable_entity
     end
   end
 
