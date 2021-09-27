@@ -31,6 +31,7 @@ ActiveAdmin.register Roulette do
 
   member_action :start_spin, method: [:post] do 
     resource.status = "in_progress"
+    resource.start_time = DateTime.now + Roulette.lobby_time.seconds
     resource.save
     GameChannel.broadcast_to(
       "ROULETTE",
