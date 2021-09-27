@@ -238,7 +238,7 @@ class Api::V2::AuthController < Api::V2::ApiController
   def forgot_password
     user = User.find_by(email: params[:email])
     if user.present?
-      if user.login_type != 'email' 
+      if user.login_type != 'Email' 
         return render json: { message: "Email was used in #{user.login_type} login" }, status: :unprocessable_entity
       end
       user.generate_verification_code
