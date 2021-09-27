@@ -70,10 +70,10 @@ Rails.application.configure do
     port: 2525,
     domain: 'mbcradio.net',
     authentication: 'plain',
-    tls: true,
+    tls: false,
     user_name: 'no-reply@mbcpapremyo.com.ph',
     password: '9fqW5q6GCK2KMtN',
-    enable_starttls_auto: true
+    enable_starttls_auto: false
   }
 
 #   MAIL_DRIVER=smtp
