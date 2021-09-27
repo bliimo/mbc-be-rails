@@ -29,7 +29,7 @@ const renderParticipantRow = (participants) => {
     content = content + `
     <tr>
       <td>${item.user.first_name + " " + item.user.last_name}</td>
-      <td>${new Date(item.user.created_at).toLocaleTimeString()}</td>
+      <td>${new Date(item.created_at).toLocaleTimeString()}</td>
       <td>${item.status}</td>
       <td>${item.win_status}</td>
     </tr>
