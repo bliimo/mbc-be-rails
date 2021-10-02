@@ -35,4 +35,31 @@ ActiveAdmin.register AdminUser do
     f.actions
   end
 
+  
+  show do
+    panel admin_user.name do
+      tabs do
+        tab 'General' do
+          columns do
+            column span: 3 do
+              attributes_table_for admin_user do
+                row :id
+                row :name
+                row :role
+                row :email
+                row :status
+               
+              end
+            end
+            if admin_user.image.attached?
+              column do
+                image_tag admin_user.image, class: 'width-100'
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
 end
