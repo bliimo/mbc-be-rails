@@ -4,6 +4,8 @@ class RadioStation < ActiveRecord::Base
   belongs_to :admin_user
   has_one_attached :image
 
+  default_scope {order(updated_at: :desc)}
+
   has_many :quiz_games, :foreign_key => "radio_station_id", :class_name => "QuizGame" 
   enum status: ["Active", "Inactive"]
 
