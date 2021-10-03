@@ -2,6 +2,7 @@ class Roulette < ApplicationRecord
   has_one_attached :background
   has_one_attached :winner_background
   has_one_attached :banner
+  has_one_attached :top_banner
 
   has_and_belongs_to_many :cities
   has_many :roulette_participants, dependent: :destroy
@@ -29,6 +30,10 @@ class Roulette < ApplicationRecord
 
   def banner_path
     return Rails.application.routes.url_helpers.rails_blob_path(banner, only_path: true) if banner.attached?
+  end
+
+  def top_banner_path
+    return Rails.application.routes.url_helpers.rails_blob_path(top_banner, only_path: true) if top_banner.attached?
   end
 
   def remaining_seconds
@@ -66,7 +71,8 @@ class Roulette < ApplicationRecord
         :background_path,
         :winner_background_path, 
         :remaining_seconds,
-        :banner_path
+        :banner_path,
+        :top_banner_path
       ]
     }
   end

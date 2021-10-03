@@ -3,7 +3,7 @@ ActiveAdmin.register Roulette do
 
   permit_params :radio_station_id, :location_restriction, :location_restriction_type, :text_description, :dj_id, 
                 :sponsor_id, :name, :number_of_winner, :price, :schedule, :redemption_details, :dti_permit, :winner_prompt, 
-                :popper_visible, :banderitas_visible, :background, :banner, :winner_background, :status, city_ids: [],
+                :popper_visible, :banderitas_visible, :background, :banner, :top_banner, :winner_background, :status, city_ids: [],
                 pies_attributes: [
                     :id,
                     :icon,
@@ -128,7 +128,7 @@ ActiveAdmin.register Roulette do
         f.input :location_restriction
         div class: f.object.location_restriction ? "" : "hide", id: "roullete_location_restriction" do 
           h4 "Location Restrictions"
-          f.input :cities, :as => :select, :input_html => {:multiple => true}
+          f.input :cities, :as => :select, :input_html => {:multiple => true}, member_label: :label_name
           f.input :location_restriction_type
           f.input :text_description, input_html: {rows: 2}
         end
@@ -136,10 +136,11 @@ ActiveAdmin.register Roulette do
         f.input :sponsor
         f.input :name, label: "Title"
         f.input :number_of_winner
-        f.input :price
+        f.input :price, label: "Prize"
         f.input :background, as: :file
         f.input :winner_background, as: :file
         f.input :banner, as: :file
+        f.input :top_banner, as: :file
         
         f.input :schedule, :as => :datetime_picker
         f.input :redemption_details, input_html: {rows: 2}
@@ -188,7 +189,9 @@ ActiveAdmin.register Roulette do
                 row :sponsor
                 row :name
                 row :number_of_winner
-                row :price
+                row :prize do 
+                  roulette.price
+                end
                 row :schedule
                 row :redemption_details
                 row :dti_permit
@@ -222,6 +225,12 @@ ActiveAdmin.register Roulette do
                 small "No winner background image"
               end
               br
+              para "Top Banner"
+              if roulette.top_banner.attached?
+                img src: url_for(roulette.top_banner), style: 'width: 100%'
+              else
+                small "No Top banner"
+              end
               para "Banner"
               if roulette.banner.attached?
                 img src: url_for(roulette.banner), style: 'width: 100%'
