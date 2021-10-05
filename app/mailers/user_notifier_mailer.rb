@@ -1,5 +1,6 @@
 class UserNotifierMailer < ApplicationMailer
-  default from: 'no-reply@mbc.com'
+  default from: 'no-reply@mbcpapremyo.com.ph'
+  
   def send_signup_email(user)
     @user = user
     mail(to: 'rorens05@gmail.com',
