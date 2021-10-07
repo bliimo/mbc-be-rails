@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_05_051907) do
+ActiveRecord::Schema.define(version: 2021_10_07_085026) do
 
   create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "namespace"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2021_10_05_051907) do
     t.bigint "admin_user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "priority", precision: 10
     t.index ["admin_user_id"], name: "index_radio_stations_on_admin_user_id"
     t.index ["city_id"], name: "index_radio_stations_on_city_id"
     t.index ["network_id"], name: "index_radio_stations_on_network_id"

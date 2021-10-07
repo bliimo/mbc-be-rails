@@ -76,6 +76,7 @@ ActiveAdmin.register Network do
             column :name do |radio_station|
               radio_station
             end
+            column :priority
             column :city
             column :frequency
             column :status do |radio_station|

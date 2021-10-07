@@ -1,7 +1,7 @@
 ActiveAdmin.register RadioStation do
   menu parent: ["Stations"], priority: 1
   
-  permit_params :network_id, :city_id, :name, :description, :frequency, :audio_streaming_link, :video_string_link, :status, :admin_user_id, :image
+  permit_params :network_id, :city_id, :name, :description, :frequency, :audio_streaming_link, :video_string_link, :status, :admin_user_id, :image, :priority
   
   
   form do |f|
@@ -21,6 +21,7 @@ ActiveAdmin.register RadioStation do
     f.input :frequency
     f.input :audio_streaming_link
     f.input :video_string_link
+    f.input :priority
     f.input :status
     f.input :admin_user, collection: djs
     f.actions
