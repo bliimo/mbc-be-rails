@@ -20,7 +20,7 @@ class AdminAuthorization < ActiveAdmin::AuthorizationAdapter
         return false if action == :destroy
         return true if action == :update && subject.dj?
       when normalized(Roulette)
-        return true if action == :read || action == :create
+        return true if action == :read || action == :create || action == :allow_player_to_join || action == :start_spin
         return true if action == :update && subject.pending?
       when normalized(User)
         return true if action == :read
@@ -52,7 +52,7 @@ class AdminAuthorization < ActiveAdmin::AuthorizationAdapter
         return true if action == :read 
         return true if action == :update && subject.id == user.id
       when normalized(Roulette)
-        return true if action == :read || action == :create
+        return true if action == :read || action == :create || action == :allow_player_to_join || action == :start_spin
       when normalized(User)
         return true if action == :read
       when normalized(Sponsor)
