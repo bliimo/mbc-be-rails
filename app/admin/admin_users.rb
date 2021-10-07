@@ -1,6 +1,6 @@
 ActiveAdmin.register AdminUser do
   menu parent: 'Users'
-  permit_params :email, :name, :role, :status, :password, :password_confirmation, :image
+  permit_params :email, :name, :role, :status, :password, :password_confirmation, :image, network_ids: []
 
   index do
     selectable_column
@@ -9,6 +9,7 @@ ActiveAdmin.register AdminUser do
     column :name
     column :role
     column :status
+    column :networks
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
@@ -28,6 +29,7 @@ ActiveAdmin.register AdminUser do
       f.input :email
       f.input :name
       f.input :role
+      f.input :networks, :as => :select, :input_html => {:multiple => true}, member_label: :name
       f.input :status
       f.input :password
       f.input :password_confirmation
@@ -46,9 +48,9 @@ ActiveAdmin.register AdminUser do
                 row :id
                 row :name
                 row :role
+                row :networks
                 row :email
                 row :status
-               
               end
             end
             if admin_user.image.attached?

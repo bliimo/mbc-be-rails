@@ -5,6 +5,7 @@ ActiveAdmin.register Network do
                 :admin_user_id, 
                 :image, 
                 :background_color, 
+                admin_user_ids: [],
                 radio_stations_attributes: [
                   :id,
                   :image,
@@ -27,7 +28,7 @@ ActiveAdmin.register Network do
           f.input :image, as: :file
           f.input :name
           f.input :background_color
-          f.input :admin_user
+          f.input :admin_users, :as => :select, :input_html => {:multiple => true}, member_label: :name, collection: AdminUser.Admin
 
       end
       tab 'Radio stations' do
@@ -43,7 +44,7 @@ ActiveAdmin.register Network do
           b.input :audio_streaming_link
           b.input :video_string_link
           b.input :status
-          b.input :admin_user
+          b.input :admin_user, label: 'DJ'
         end
       end
     end
@@ -64,7 +65,7 @@ ActiveAdmin.register Network do
                 row :name
                 row :background_color
                 row :assigned_to do 
-                  network.admin_user
+                  network.admin_users
                 end
               end
             end

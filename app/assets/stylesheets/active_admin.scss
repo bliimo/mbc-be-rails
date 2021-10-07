@@ -11,6 +11,11 @@ $side-by-side-filter-input-width: auto;
 @import "switch"; 
 @import "active_admin_datetimepicker";
 
+.select2-search__field{
+  height: 15px !important;
+  margin-top: 10px !important;
+  font-size: 12px
+}
 
 .status_tag{
   &.active, &.verified, &.online, &.ready{

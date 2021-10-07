@@ -10,7 +10,7 @@ default: &default
 development:
   <<: *default
   database: <%= ENV['DB_NAME'] || "mbc_dev" %>
-  username: <%= ENV['DB_USER'] || "bliimo" %>
+  username: <%= ENV['DB_USER'] || "username" %>
   password: <%= ENV['DB_PASSWORD'] || "password" %>
   host:     <%= ENV['DB_HOST'] || "localhost" %>
 

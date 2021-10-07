@@ -20,6 +20,9 @@ jQuery(function() {
   $("#roulette_dj_id").select2()
   $("#roulette_sponsor_id").select2()
   $("#roulette_city_ids").select2()
+  $("#admin_user_network_ids").select2()
+  $("#network_admin_user_ids").select2()
+  
 })
 
 
