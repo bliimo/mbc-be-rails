@@ -112,6 +112,7 @@ ActiveAdmin.register Roulette do
     selectable_column
     id_column
     column :name
+    column :radio_station
     column :location_restriction
     column :dj
     column :schedule
@@ -122,9 +123,17 @@ ActiveAdmin.register Roulette do
   end
 
   form do |f|
+    if current_admin_user.super_admin?
+      djs = AdminUser.djs
+      radio_stations = RadioStation.all
+    else
+      radio_stations = RadioStation.all.where(network_id: current_admin_user.network_ids)
+      djs = AdminUser.djs.joins(:networks).where(networks: {id: current_admin_user.network_ids})
+    end
+
     tabs do 
       tab "Game Info" do 
-        f.input :radio_station
+        f.input :radio_station, collection: radio_stations
         f.input :location_restriction
         div class: f.object.location_restriction ? "" : "hide", id: "roullete_location_restriction" do 
           h4 "Location Restrictions"
@@ -132,7 +141,7 @@ ActiveAdmin.register Roulette do
           f.input :location_restriction_type
           f.input :text_description, input_html: {rows: 2}
         end
-        f.input :dj, collection: AdminUser.djs
+        f.input :dj, collection: djs
         f.input :sponsor
         f.input :name, label: "Title"
         f.input :number_of_winner

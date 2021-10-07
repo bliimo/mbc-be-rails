@@ -5,8 +5,16 @@ ActiveAdmin.register RadioStation do
   
   
   form do |f|
+    f.semantic_errors *f.object.errors.keys
+    if current_admin_user.super_admin?
+      networks = Network.all
+      djs = AdminUser.djs
+    else
+      networks = Network.where(id: current_admin_user.network_ids)
+      djs = AdminUser.djs.joins(:networks).where(networks: {id: current_admin_user.network_ids})
+    end
     f.input :image, as: :file
-    f.input :network
+    f.input :network, collection: networks
     f.input :city, input_html: {class: 'station_city_select'}
     f.input :name
     f.input :description, input_html: { rows: "2" }
@@ -14,7 +22,7 @@ ActiveAdmin.register RadioStation do
     f.input :audio_streaming_link
     f.input :video_string_link
     f.input :status
-    f.input :admin_user
+    f.input :admin_user, collection: djs
     f.actions
   end
 end

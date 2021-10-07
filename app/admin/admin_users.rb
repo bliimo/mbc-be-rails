@@ -23,14 +23,26 @@ ActiveAdmin.register AdminUser do
   filter :sign_in_count
   filter :created_at
 
+  before_save do |admin_user|
+    if current_admin_user.admin?
+      admin_user.role = "DJ"
+    end
+  end
+
   form do |f|
+    if current_admin_user.super_admin?
+      networks = Network.all
+    else
+      networks = Network.where(id: current_admin_user.network_ids)
+    end
+    f.semantic_errors *f.object.errors.keys
     f.inputs do
       f.input :image, as: :file
       f.input :email
       f.input :name
-      f.input :role
-      f.input :networks, :as => :select, :input_html => {:multiple => true}, member_label: :name
-      f.input :status
+      f.input :role if current_admin_user.super_admin?
+      f.input :networks, :as => :select, :input_html => {:multiple => true}, member_label: :name, collection: networks if !current_admin_user.dj?
+      f.input :status if !current_admin_user.dj?
       f.input :password
       f.input :password_confirmation
     end
