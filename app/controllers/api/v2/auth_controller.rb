@@ -239,7 +239,9 @@ class Api::V2::AuthController < Api::V2::ApiController
     user = User.find_by(email: params[:email])
     if user.present?
       if user.login_type != 'Email' 
-        return render json: { message: "Email was used in #{user.login_type} login" }, status: :unprocessable_entity
+        # return render json: { message: "Email was used in #{user.login_type} login" }, status: :unprocessable_entity
+        return render json: { message: "Email is already in use. Please use another email address" }, status: :unprocessable_entity
+        
       end
       user.generate_verification_code
       user.save(validate: false)
@@ -346,7 +348,7 @@ class Api::V2::AuthController < Api::V2::ApiController
         { type: "LOGOUT", token: user.token}
       )
     else
-      render json: {type: "ALREADY_LOGGED_IN", message: "You are currently logged in another device"}, status: :unauthorized
+      render json: {type: "ALREADY_LOGGED_IN", message: "You are currently logged in on another device"}, status: :unauthorized
     end
   end
 end
