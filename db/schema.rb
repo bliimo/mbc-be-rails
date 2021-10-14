@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2021_10_07_085026) do
 
-  create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_admin_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
-  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "admin_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "admin_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -62,14 +62,14 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "admin_users_networks", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "admin_users_networks", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "network_id"
     t.bigint "admin_user_id"
     t.index ["admin_user_id"], name: "index_admin_users_networks_on_admin_user_id"
     t.index ["network_id"], name: "index_admin_users_networks_on_network_id"
   end
 
-  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "province_id", null: false
     t.string "name"
     t.string "code"
@@ -78,14 +78,14 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["province_id"], name: "index_cities_on_province_id"
   end
 
-  create_table "cities_roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "cities_roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "roulette_id"
     t.bigint "city_id"
     t.index ["city_id"], name: "index_cities_roulettes_on_city_id"
     t.index ["roulette_id"], name: "index_cities_roulettes_on_roulette_id"
   end
 
-  create_table "game_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "game_records", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "game_id"
     t.datetime "start_time"
     t.string "winners"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.integer "number_of_winners"
   end
 
-  create_table "mobile_releases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "mobile_releases", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "build_code"
     t.integer "update_type"
     t.boolean "maintenance_mode"
@@ -103,14 +103,14 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "networks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "networks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "background_color", default: "#ffffff"
   end
 
-  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.integer "game_id"
@@ -120,7 +120,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.integer "user_id"
   end
 
-  create_table "pies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "pies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "roulette_id", null: false
     t.string "name"
     t.string "color"
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["roulette_id"], name: "index_pies_on_roulette_id"
   end
 
-  create_table "players", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "players", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "game_id"
     t.bigint "user_id"
     t.integer "win_status"
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "provinces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "provinces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "region_id", null: false
     t.string "name"
     t.string "code"
@@ -146,7 +146,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["region_id"], name: "index_provinces_on_region_id"
   end
 
-  create_table "question_choices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "question_choices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "question_id", null: false
     t.string "label"
     t.string "description"
@@ -157,7 +157,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["question_id"], name: "index_question_choices_on_question_id"
   end
 
-  create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "quiz_game_id", null: false
     t.text "question"
     t.integer "countdown_in_seconds"
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["quiz_game_id"], name: "index_questions_on_quiz_game_id"
   end
 
-  create_table "quiz_games", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "quiz_games", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.integer "sponsor_id"
@@ -180,7 +180,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "radio_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "radio_stations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "network_id", null: false
     t.bigint "city_id", null: false
     t.string "name"
@@ -198,14 +198,14 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["network_id"], name: "index_radio_stations_on_network_id"
   end
 
-  create_table "regions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "regions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name"
     t.string "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "roulette_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "roulette_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "roulette_id", null: false
     t.bigint "user_id", null: false
     t.datetime "spin_at"
@@ -216,7 +216,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["user_id"], name: "index_roulette_participants_on_user_id"
   end
 
-  create_table "roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "roulettes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "radio_station_id", null: false
     t.boolean "location_restriction"
     t.integer "location_restriction_type"
@@ -239,7 +239,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["radio_station_id"], name: "index_roulettes_on_radio_station_id"
   end
 
-  create_table "sponsors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "sponsors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.integer "status", default: 0
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "user_notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "user_notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
     t.bigint "notification_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -255,7 +255,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_085026) do
     t.index ["notification_id"], name: "index_user_notifications_on_notification_id"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
