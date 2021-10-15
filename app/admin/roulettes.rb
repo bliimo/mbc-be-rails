@@ -31,7 +31,8 @@ ActiveAdmin.register Roulette do
 
   member_action :start_spin, method: [:post] do 
     resource.status = "in_progress"
-    resource.start_time = DateTime.now + Roulette.lobby_time.seconds
+    resource.start_time = DateTime.now
+    resource.end_time = DateTime.now + Roulette.lobby_time.seconds
     resource.save
     GameChannel.broadcast_to(
       "ROULETTE",
@@ -86,7 +87,7 @@ ActiveAdmin.register Roulette do
         resource,
         { winners: winners, player_count: player_count, players: players, type: "FINISHED"}
       )
-      resource.start_time = DateTime.now
+      resource.end_time = DateTime.now
       resource.status = "done"
       resource.save
       GameChannel.broadcast_to(
@@ -210,7 +211,12 @@ ActiveAdmin.register Roulette do
                 row :background
                 row :winner_background
                 row :cities
-                row :start_time
+                row :start_time do
+                  "#{roulette.start_time&.strftime("%r")}, #{roulette.start_time&.strftime("%D")}"
+                end
+                row :end_time do
+                  "#{roulette.end_time&.strftime("%r")}, #{roulette.end_time&.strftime("%D")}"
+                end
     
                 row :status do
                   status_tag roulette.status.present? ? roulette.status : 'Inactive'
