@@ -20,6 +20,26 @@ class Roulette < ApplicationRecord
   scope :scheduled_today, -> { where(schedule: DateTime.now.beginning_of_day...DateTime.now.end_of_day)}
   scope :available, -> { where.not(status: "done")}
   
+  validates :location_restriction_type, presence: true, if: :location_restriction?
+  validates :text_description, presence: true, if: :location_restriction?
+  validates :name, presence: true 
+  validates :number_of_winner, presence: true 
+  validates :price, presence: true 
+  validates :schedule, presence: true 
+  validates :redemption_details, presence: true 
+  validates :dti_permit, presence: true 
+
+  validate :city_presense
+
+
+  def city_presense
+    if location_restriction?
+      if cities.count.zero?
+        errors.add(:cities, "Game must have at least 1 city")
+      end
+    end
+  end
+
   def background_path
     return Rails.application.routes.url_helpers.rails_blob_path(background, only_path: true) if background.attached?
   end
