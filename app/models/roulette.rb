@@ -28,15 +28,23 @@ class Roulette < ApplicationRecord
   validates :schedule, presence: true 
   validates :redemption_details, presence: true 
   validates :dti_permit, presence: true 
-
   validate :city_presense
 
+  before_save :validate_location_restriction
 
   def city_presense
     if location_restriction?
-      if cities.count.zero?
+      if city_ids.count.zero?
         errors.add(:cities, "Game must have at least 1 city")
       end
+    end
+  end
+
+  def validate_location_restriction
+    if !self.location_restriction?
+      self.cities.destroy_all
+      self.location_restriction_type = nil
+      self.text_description = nil
     end
   end
 
