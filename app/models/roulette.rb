@@ -35,7 +35,7 @@ class Roulette < ApplicationRecord
   def city_presense
     if location_restriction?
       if city_ids.count.zero?
-        errors.add(:cities, "Game must have at least 1 city")
+        errors.add(:cities, "Game must have at least 1 city..")
       end
     end
   end
