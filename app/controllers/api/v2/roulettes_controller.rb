@@ -8,15 +8,17 @@ class Api::V2::RoulettesController < Api::V2::ApiController
   end
 
   def show 
-    user = session_user
-    participant = RouletteParticipant.find_or_create_by(
-      roulette_id: @roulette.id, 
-      user_id: user.id
-    )
-    GameChannel.broadcast_to(
-      @roulette,
-      { type: "PLAYER_JOIN", participants: @roulette.roulette_participants.as_json(include: :user, methods: [:status, :win_status])}
-    )
+    if params[:type].blank?
+      user = session_user
+      participant = RouletteParticipant.find_or_create_by(
+        roulette_id: @roulette.id, 
+        user_id: user.id
+      )
+      GameChannel.broadcast_to(
+        @roulette,
+        { type: "PLAYER_JOIN", participants: @roulette.roulette_participants.as_json(include: :user, methods: [:status, :win_status])}
+      )
+    end
     render json: @roulette.as_json(Roulette.serializer), status: :ok
   end
 

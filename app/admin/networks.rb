@@ -24,12 +24,10 @@ ActiveAdmin.register Network do
     f.semantic_errors *f.object.errors.keys
     tabs do
       tab 'Network' do
-
-          f.input :image, as: :file
-          f.input :name
-          f.input :background_color
-          f.input :admin_users, :as => :select, :input_html => {:multiple => true}, member_label: :name, collection: AdminUser.Admin
-
+        f.input :image, as: :file
+        f.input :name
+        f.input :background_color
+        f.input :admin_users, :as => :select, :input_html => {:multiple => true}, member_label: :name, collection: AdminUser.all
       end
       tab 'Radio stations' do
         f.has_many :radio_stations,

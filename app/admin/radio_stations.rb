@@ -12,6 +12,7 @@ ActiveAdmin.register RadioStation do
     else
       networks = Network.where(id: current_admin_user.network_ids)
       djs = AdminUser.djs.joins(:networks).where(networks: {id: current_admin_user.network_ids})
+      djs = AdminUser.djs
     end
     f.input :image, as: :file
     f.input :network, collection: networks
