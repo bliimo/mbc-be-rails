@@ -44,7 +44,7 @@ ActiveAdmin.register Roulette do
     )
 
     Rails.logger.debug "Setting countdown"
-    time = Roulette.lobby_time
+    time = Roulette.lobby_time - 5 + rand(0.0..5.0)
     Rails.logger.debug time.to_s
     redirect_to admin_roulette_path(resource), notice: "Game is in progress"
     
@@ -56,44 +56,54 @@ ActiveAdmin.register Roulette do
       Rails.logger.debug "Getting all users"
       players = resource.roulette_participants.spinner
 
-      # generate winner 
-      # get number of players
-      player_count = players.count
-      number_of_winners = resource.number_of_winner
-      number_of_winners = player_count if player_count < resource.number_of_winner
+      # Check if there are winners already
+      if resource.roulette_participants.wins.count.positive?
+        GameChannel.broadcast_to(
+          "ROULETTE",
+          {type: "GAMES_UPDATED"}
+        )
+      else
+        # generate winner 
+        # get number of players
+        player_count = players.count
+        number_of_winners = resource.number_of_winner
+        number_of_winners = player_count if player_count < resource.number_of_winner
 
-      Rails.logger.debug "Player count: " + player_count.to_s
-      Rails.logger.debug "Number of winners: " + number_of_winners.to_s
+        Rails.logger.debug "Player count: " + player_count.to_s
+        Rails.logger.debug "Number of winners: " + number_of_winners.to_s
+        Rails.logger.debug "Generating random indexes"
 
-      Rails.logger.debug "Generating random indexes"
-      indexes = []
-      while indexes.count < number_of_winners
-        random_index = Faker::Number.between(from: 0, to: player_count - 1)
-        indexes.push(random_index) if !indexes.include? random_index
-        Rails.logger.debug "generated index: " + random_index.to_s
+        indexes = []
+
+        while indexes.count < number_of_winners
+          random_index = Faker::Number.between(from: 0, to: player_count - 1)
+          indexes.push(random_index) if !indexes.include? random_index
+          Rails.logger.debug "generated index: " + random_index.to_s
+        end
+
+        Rails.logger.debug "Generating Winners"
+
+        winners = indexes.map do |item|
+          players[item].winner = true
+          players[item].save
+          players[item]
+        end
+
+        Rails.logger.debug "Generating Winners"
+        # broadcast winner
+        # Rails.logger.debug "broadcasting"
+        GameChannel.broadcast_to(
+          resource,
+          { winners: winners, player_count: player_count, players: players, type: "FINISHED"}
+        )
+        resource.end_time = DateTime.now
+        resource.status = "done"
+        resource.save
+        GameChannel.broadcast_to(
+          "ROULETTE",
+          {type: "GAMES_UPDATED"}
+        )
       end
-
-      Rails.logger.debug "Generating Winners"
-
-      winners = indexes.map do |item|
-        players[item].winner = true
-        players[item].save
-        players[item]
-      end
-      Rails.logger.debug "Generating Winners"
-      # broadcast winner
-      # Rails.logger.debug "broadcasting"
-      GameChannel.broadcast_to(
-        resource,
-        { winners: winners, player_count: player_count, players: players, type: "FINISHED"}
-      )
-      resource.end_time = DateTime.now
-      resource.status = "done"
-      resource.save
-      GameChannel.broadcast_to(
-        "ROULETTE",
-        {type: "GAMES_UPDATED"}
-      )
     end
   end
 
