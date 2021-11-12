@@ -9,6 +9,7 @@ class Api::V2::LocationsController < Api::V2::ApiController
   end
 
   def cities
-    render json: City.all.where(province_id: params[:province_id]).order(name: :asc)
+    # render json: {message: "test"}
+    render json: City.all.where(province_id: params[:province_id]).order(name: :asc), include: :province
   end
 end
