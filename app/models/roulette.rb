@@ -80,7 +80,7 @@ class Roulette < ApplicationRecord
     {
       include: [
         :sponsor,
-        :cities,
+        cities: {include: :province},
         pies: {
           methods: [:icon_path]
         },
