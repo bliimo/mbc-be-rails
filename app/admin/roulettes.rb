@@ -58,6 +58,7 @@ ActiveAdmin.register Roulette do
 
       # Check if there are winners already
       if resource.roulette_participants.wins.count.positive?
+        Rails.logger.debug "WINNER GENERATION REJECTED"
         GameChannel.broadcast_to(
           "ROULETTE",
           {type: "GAMES_UPDATED"}

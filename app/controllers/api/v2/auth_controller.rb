@@ -197,7 +197,7 @@ class Api::V2::AuthController < Api::V2::ApiController
       render(
         json: session_user,
         methods: %i[image_path editable],
-        include: [:city],
+        include: [{city: {include: :province}}],
         status: :ok
       )
   end
