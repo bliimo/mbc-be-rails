@@ -36,7 +36,7 @@ class User < ApplicationRecord
   end
 
   def editable
-    return false if Roulette.all.address.available.count.positive?
+    return false if Roulette.all.scheduled_today.address.available.count.positive?
     return true
   end
 
