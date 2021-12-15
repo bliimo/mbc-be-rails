@@ -175,8 +175,8 @@ class Api::V2::AuthController < Api::V2::ApiController
         user.image = base64_to_file(params[:image])
         user.save
       end
-      UserNotifierMailer.send_confirmation_email(user).deliver
       handle_valid_credential(user)
+      UserNotifierMailer.send_confirmation_email(user).deliver
       
     else
       render json: user.errors.full_messages, status: :unprocessable_entity
@@ -188,8 +188,8 @@ class Api::V2::AuthController < Api::V2::ApiController
     if user.verified_at.present?
       render json: {message: "User is already verified"}, status: :unprocessable_entity
     else
-      UserNotifierMailer.send_confirmation_email(user).deliver
       render json: {message: "Email resent"}
+      UserNotifierMailer.send_confirmation_email(user).deliver
     end
   end
 
@@ -227,8 +227,8 @@ class Api::V2::AuthController < Api::V2::ApiController
       if user.verified_at.present?
         render json: { message: 'User was already verified' }, status: :unprocessable_entity
       else
-        UserNotifierMailer.send_verification_code(user, request).deliver
         render json: { message: 'Verification code has been successfully resent!' }, status: :ok
+        UserNotifierMailer.send_verification_code(user, request).deliver
       end
     else
       render json: { message: 'No user found' }, status: :unprocessable_entity
@@ -245,8 +245,8 @@ class Api::V2::AuthController < Api::V2::ApiController
       end
       user.generate_verification_code
       user.save(validate: false)
-      UserNotifierMailer.send_verification_code(user, request).deliver
       render json: { message: 'Verification code has been successfully sent!' }, status: :ok
+      UserNotifierMailer.send_verification_code(user, request).deliver
     else
       render json: { message: 'Email is not valid' }, status: :unprocessable_entity
     end
@@ -259,8 +259,8 @@ class Api::V2::AuthController < Api::V2::ApiController
         user.generate_verification_code
         user.save(validate: false)
       end
-      UserNotifierMailer.send_verification_code(user, request).deliver
       render json: { message: 'Verification code has been successfully sent!' }, status: :ok
+      UserNotifierMailer.send_verification_code(user, request).deliver
     else
       render json: { message: 'No user found' }, status: :unprocessable_entity
     end

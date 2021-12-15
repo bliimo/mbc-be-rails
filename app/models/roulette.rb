@@ -31,6 +31,8 @@ class Roulette < ApplicationRecord
   validate :city_presense
 
   before_save :validate_location_restriction
+  validate :validate_number_of_winner
+  validate :validate_schedule
 
   def city_presense
     if location_restriction?
@@ -38,6 +40,14 @@ class Roulette < ApplicationRecord
         errors.add(:cities, "Game must have at least 1 city..")
       end
     end
+  end
+
+  def validate_number_of_winner
+    errors.add(:number_of_winner, "can't be less than 1") if number_of_winner.present? && number_of_winner < 1
+  end
+
+  def validate_schedule
+    errors.add(:schedule, "can't be in the past") if schedule.present? && schedule < DateTime.now
   end
 
   def validate_location_restriction
