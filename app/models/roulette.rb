@@ -47,7 +47,9 @@ class Roulette < ApplicationRecord
   end
 
   def validate_schedule
-    errors.add(:schedule, "can't be in the past") if schedule.present? && schedule < DateTime.now
+    if new_record?
+      errors.add(:schedule, "can't be in the past") if schedule.present? && schedule < DateTime.now
+    end
   end
 
   def validate_location_restriction
