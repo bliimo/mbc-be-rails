@@ -1,5 +1,13 @@
 ActiveAdmin.register QuizGame do
-  menu parent: ["Games"], priority: 2
+  # menu parent: ["Games"], priority: 2
+  menu false
+
+  controller do
+    before_action :restrict_page
+    def restrict_page
+      redirect_to admin_dashboard_path
+    end
+  end
 
   permit_params :title, :description, :sponsor_id, :city_id, :radio_station_id, 
                 :price, :number_of_winner, :schedule, :status, :image,
