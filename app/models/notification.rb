@@ -4,7 +4,7 @@ class Notification < ApplicationRecord
   # validates :schedule, presence: true  
   default_scope { order(created_at: :desc) }
 
-  belongs_to :user, class_name: "MbcUser", foreign_key: "user_id", optional: true
+  belongs_to :user, optional: true
   has_many :user_notifications, dependent: :destroy
 
   scope :to_be_notified, -> { where(schedule: (DateTime.now - 1.days)...DateTime.now)}
