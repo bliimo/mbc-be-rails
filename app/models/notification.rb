@@ -14,7 +14,6 @@ class Notification < ApplicationRecord
   after_save :notify_user
 
   def game
-    Game.find_by_game_id(game_id)
   end
 
   def is_read
