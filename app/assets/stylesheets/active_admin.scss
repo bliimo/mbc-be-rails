@@ -5,92 +5,98 @@
 $primary-color: #00b5fd;
 $filter-field-seperator-width: auto;
 $side-by-side-filter-input-width: auto;
-@import "arctic_admin/base"; 
+@import "arctic_admin/base";
 @import "select2";
 @import "select2-bootstrap";
-@import "switch"; 
+@import "switch";
 @import "active_admin_datetimepicker";
 
-.select2-search__field{
+.select2-search__field {
   height: 15px !important;
   margin-top: 10px !important;
-  font-size: 12px
+  font-size: 12px;
 }
 
-.status_tag{
-  &.active, &.verified, &.online, &.ready{
+.status_tag {
+  &.active,
+  &.verified,
+  &.online,
+  &.ready {
     background-color: green;
   }
-  &.inactive, &.unverified, &.google{
+  &.inactive,
+  &.unverified,
+  &.google {
     background-color: red;
   }
-  &.in_progress{
-    background-color: orange
+  &.in_progress {
+    background-color: orange;
   }
-  &.email, &.done{
+  &.email,
+  &.done {
     background-color: rgb(135, 135, 135);
   }
-  &.facebook, &.pending{
+  &.facebook,
+  &.pending {
     background-color: blue;
   }
-  &.apple{
+  &.apple {
     background-color: rgb(0, 0, 0);
   }
 }
 
-.width-100{
-  width: 100%
+.width-100 {
+  width: 100%;
 }
 
-.actions{
+.actions {
   margin-top: 12px;
 }
 
-.question-input-container{
+.question-input-container {
   border: 1px solid #e4eaec;
   padding-top: 12px;
   padding-bottom: 12px;
 }
 
-.has_many_container.question_choices{
+.has_many_container.question_choices {
   margin: 20px 100px !important;
   border: 1px solid #e4eaec;
-  padding: 20px
+  padding: 20px;
 }
 
-.errors{
+.errors {
   margin-bottom: 20px;
-  li{
-    color: #dc4747
+  li {
+    color: #dc4747;
   }
 }
 
-.main-panel{
+.main-panel {
   border: 1px solid #e4eaec;
-  padding: 20px
+  padding: 20px;
 }
 
-.option-container{
+.option-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 10px;
   grid-gap: 20px;
-  p{
+  p {
     margin: 0 !important;
     text-shadow: 0 0 0px 100px #f8f8f8;
-
   }
-  .option-item{
+  .option-item {
     position: relative;
     border-radius: 12px;
     overflow: hidden;
     padding: 12px;
 
-    .option-text-container{
-      z-index: 100
+    .option-text-container {
+      z-index: 100;
     }
 
-    .option-img{
+    .option-img {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -99,35 +105,34 @@ $side-by-side-filter-input-width: auto;
       right: 0;
       bottom: 0;
       object-fit: cover;
-      z-index: 0
+      z-index: 0;
     }
 
-    .option-label{
+    .option-label {
       font-weight: bold;
       font-size: 16px;
     }
   }
 }
 
-.text-danger{
-  color: red !important
+.text-danger {
+  color: red !important;
 }
 
-.text-success{
-  color: rgb(0, 146, 0) !important
+.text-success {
+  color: rgb(0, 146, 0) !important;
 }
 
-.version-manager-form{
-
-  h3{
+.version-manager-form {
+  h3 {
     margin-bottom: 12px;
   }
 
-  .column{
+  .column {
     width: 50%;
   }
 
-  .version_manager_submit{
+  .version_manager_submit {
     padding: 10px !important;
     display: inline-block !important;
     margin-top: 12px;
@@ -135,27 +140,26 @@ $side-by-side-filter-input-width: auto;
   }
 }
 
-.hide{
-  display: none
+.hide {
+  display: none;
 }
 
-#roullete_location_restriction{
+#roullete_location_restriction {
   border: 1px solid rgb(218, 218, 218);
   padding: 12px;
   margin-bottom: 12px;
 }
 
-.lobby-timer-container{
+.lobby-timer-container {
   display: flex;
   flex-direction: row;
   align-items: center;
 
-  .timer-label{
-    padding-right: 12px
+  .timer-label {
+    padding-right: 12px;
   }
 
-  .timer{
-    
+  .timer {
     // background-color: rgb(216, 216, 216);
     display: flex;
     flex-direction: row;
@@ -163,12 +167,14 @@ $side-by-side-filter-input-width: auto;
     padding: 8px 12px;
     align-items: center;
 
-    #timer-minutes, #timer-seconds{
+    #timer-minutes,
+    #timer-seconds {
       font-size: 20px;
       text-align: center;
     }
 
-    #button-up, #button-down{
+    #button-up,
+    #button-down {
       display: block !important;
       color: black;
       margin-left: 16px;
@@ -176,48 +182,123 @@ $side-by-side-filter-input-width: auto;
       text-decoration: none !important;
     }
 
-    small{
-      text-align: center; 
-      display: block
+    small {
+      text-align: center;
+      display: block;
     }
   }
 }
 
-.let-player-join-btn{
+.let-player-join-btn {
   background-color: yellow !important;
   text-align: center;
   padding: 4px !important;
   color: black !important;
   display: block !important;
   width: 200px !important;
-  margin: 25px auto
+  margin: 25px auto;
 }
 
-.roulette-button-option{
-  margin: 24px 0
+.roulette-button-option {
+  margin: 24px 0;
 }
 
-.pie-container{
+.pie-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  .pie{
+  .pie {
     padding: 12px;
-    box-shadow: 1px 1px 4px rgb(186, 186, 186); 
+    box-shadow: 1px 1px 4px rgb(186, 186, 186);
     margin-left: 12px;
     margin-bottom: 12px;
     background-color: red;
     display: flex;
     flex-direction: row;
     align-items: center;
-    img{
+    img {
       width: 30px;
       height: 30px;
       border-radius: 32px;
-      object-fit: cover
+      object-fit: cover;
     }
-    p{
+    p {
       margin: 0 12px !important;
+    }
+  }
+}
+
+.stream-container {
+  width: 1280px;
+  height: 720px;
+  margin: 20px auto;
+  position: relative;
+  .stream-bg-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .stream-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    .stream-player-info {
+      flex: 1;
+      .player-count {
+        color: white;
+        font-weight: bold;
+        margin-top: 80px;
+        font-size: 90px;
+
+        margin-left: 185px;
+        display: inline-block;
+        text-align: center;
+        width: 220px;
+      }
+      #player-list-container {
+        margin-top: 36px;
+        p {
+          color: white;
+          background-color: #1f1ab5;
+          display: block;
+          margin-left: 100px;
+          width: 390px;
+          text-align: center;
+          font-size: 32px;
+          font-weight: bold;
+          word-wrap: nowrap;
+          margin-bottom: 21px;
+          border-radius: 10px;
+          &.winner {
+            background-color: #fff112;
+            color: #1f1ab5;
+          }
+        }
+      }
+    }
+    .stream-timer {
+      flex: 1;
+      .timer-label {
+        margin-top: 243px;
+        margin-left: 63px;
+        width: 430px;
+        border-radius: 10px;
+        display: block;
+      }
+      .timer-time {
+        line-height: 200px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: white;
+        font-size: 180px;
+        text-align: center;
+        margin-left: -100px;
+        font-weight: bolder;
+        letter-spacing: -10px;
+        -webkit-text-stroke: 10px #1f1ab5;
+        font-style: italic;
+      }
     }
   }
 }

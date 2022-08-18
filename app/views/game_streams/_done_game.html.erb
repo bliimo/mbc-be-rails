@@ -1,0 +1,15 @@
+<div class="stream-container">
+  <img src="/images/roulette-bg.jpg" alt="pending-game-bg" class="stream-bg-img">
+  <div class="stream-content">
+    <div class="stream-player-info">
+      <p class="player-count" id="player-count"><%= @roulette.roulette_participants.count %></p>
+      <div id="player-list-container">
+        <% @roulette.roulette_participants.limit(6).order(winner: :desc).order(created_at: :desc).each do |item| %>
+          <p class="<%= item.winner ? "winner" : "" %>"><%= item.user.name %></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="stream-timer">
+    </div>
+  </div>
+</div>
