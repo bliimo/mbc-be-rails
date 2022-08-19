@@ -1,0 +1,78 @@
+class Api::V2::AuthController < Api::V2::ApiController
+  require 'open-uri'
+  include ImagesHelper
+
+  before_action :require_user_login, only: [:profile, :logout]
+
+  def connection_test
+    Rails.logger.debug "connection test action"
+    UserChannel.broadcast_to(
+      User.find(21),
+      { type: "LOGOUT"}
+    )
+  end
+
+  def login
+    user = User.where(login_type: "Email").find_by(email: params[:email])
+    if user.present? && user.valid_password?(params[:password])
+      unless user.status == 'Active'
+        render json: { message: 'Your account is inactive.' }, status: :unauthorized
+        return
+      end
+      handle_valid_credential(user)
+    else
+      render json: { message: 'Log in failed! Invalid email or password.' }, status: :unauthorized
+    end
+  end
+
+  def login_with_facebook
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    
+    result = JSON.parse Net::HTTP.get(URI.parse("https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture.type(large)&access_token=#{access_token}"))
+    return render json: {message: "Invalid access key", fb_response: result}, status: :unprocessable_entity if result["error"].present?
+    # return render json: result
+    user = User.where(login_type: "Facebook").find_by(auth_id: result["id"])
+    if user.present?
+      unless user.status == 'Active'
+        render json: { message: 'Your account is inactive.' }, status: :unauthorized
+        return
+      end
+      handle_valid_credential(user)
+    else
+      user = User.new(
+        email: result['email'] || "#{DateTime.now.to_i}#{Faker::Alphanumeric.alphanumeric(number: 3)}@mbc.app",
+        first_name: result["first_name"],
+        last_name: result["last_name"],
+        gender: "Undisclosed",
+        country: "Philippines",
+        region_id: 1,
+        province_id: 1,
+        city_id: 1,
+        status: "Active",
+        login_type: "Facebook",
+        auth_id: result["id"],
+        verified_at: DateTime.now
+      )
+      if user.save 
+        user.image.attach({
+          io: URI.open(result["picture"]["data"]["url"]),
+          filename: "#{DateTime.now.to_i}_facebook_image.jpg"
+        })
+        handle_valid_credential(user)
+      else
+        existing_user = User.find_by_email(result["email"])
+        if existing_user.present?
+          render json: {message: "Email has already been used in #{existing_user.login_type} login"}, status: :unprocessable_entity
+        else
+          render json: {message: "Failed to save the user", errors: user.errors.full_messages}, status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
+  def login_with_google
+    access_token = params[:access_token]
+    return render json: {error: {message: "Access token is required"}} if access_token.blank?
+    decoded = JWT.decode(access_token, nil, false)
+    result = decoded.first
