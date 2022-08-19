@@ -7,6 +7,12 @@ Rails.application.routes.draw do
   resources :game_records
   mount ActionCable.server => '/cable'
 
+  resources :game_streams do
+    member do
+      get :stream
+    end
+  end
+
   resources :messages
   resources :streaming_rooms do
     member do
@@ -24,13 +30,13 @@ Rails.application.routes.draw do
   end
   resources :billing_addresses
   resources :buyers do
-    end
+  end
   resources :option_items
   resources :option_groups do
-    end
+  end
   resources :variations
   resources :products do
-        member do
+    member do
       post :upload_image
       post :add_tags
       delete :delete_tag
@@ -39,7 +45,7 @@ Rails.application.routes.draw do
   end
   resources :categories
   resources :merchants do
-      member do
+    member do
       post :upload_image
       delete :delete_image
     end
@@ -77,10 +83,10 @@ Rails.application.routes.draw do
       post 'auth/change_password'
       patch 'profile/update_profile'
       get 'latest_version' => 'version_checker#latest_version'
-      
+
       resources :notifications, only: [:index]
 
-      resources :locations do 
+      resources :locations do
         collection do
           get :regions
           get :provinces
@@ -88,15 +94,14 @@ Rails.application.routes.draw do
         end
       end
       resources :networks, only: [:index]
-      resources :roulettes, only: [:index, :show] do
-        member do 
+      resources :roulettes, only: %i[index show] do
+        member do
           post :spin_game
         end
         collection do
           get :my_prices
         end
       end
-
     end
     namespace :v1 do
       get 'auth/connection_test'
@@ -142,7 +147,7 @@ Rails.application.routes.draw do
       end
 
       resources :stations
-      
+
       resources :documents do
         collection do
           get :terms_and_conditions
@@ -150,7 +155,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :quiz_games 
+      resources :quiz_games
     end
   end
 end

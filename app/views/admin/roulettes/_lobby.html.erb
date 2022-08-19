@@ -51,8 +51,7 @@
     </tr>
   </thead>
   <tbody id="participants-content">
-    
-    <% roulette.roulette_participants.each do |participant| %>
+    <% roulette.roulette_participants.order(winner: :desc).each do |participant| %>
       <tr>
         <td><%= link_to participant.user.name, admin_user_path(participant.user) %></td>
         <td><%= format_time participant.created_at %></td>
@@ -60,6 +59,6 @@
         <td><%= participant.win_status %></td>
       </tr>
     <% end %>
-    
   </tbody>
 </table>
+<%= link_to "Stream Game", stream_game_stream_path(roulette), target: "_blank" %>

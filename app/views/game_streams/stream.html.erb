@@ -1,0 +1,11 @@
+<input type="hidden" value="<%= @roulette.id %>" id="game_id">
+<% case @roulette.status %>
+<% when "pending" %>
+<%= render 'pending_game' %>
+<% when "ready" %>
+<%= render 'ready_game' %>
+<% when "in_progress" %>
+<%= render 'in_progress_game' %>
+<% when "done" %>
+<%= render 'done_game' %>
+<% end %>
