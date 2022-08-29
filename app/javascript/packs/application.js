@@ -35,7 +35,6 @@ const initTimer = () => {
       }
       const minutes = Math.floor(totalSeconds / 60)
       const seconds = Math.floor(totalSeconds - (minutes * 60))
-      console.log({minutes, seconds})
       $("#countdown-timer").html(`${String(minutes)?.padStart(2, "0")} : ${String(seconds)?.padStart(2, "0")} `)
     }, 1000);
   }
@@ -63,6 +62,17 @@ const renderParticipantRow = (participants) => {
   }
 }
 
+const startSpin = () => {
+  let streamTimer = document.querySelector(".timer-label")
+  streamTimer.classList.add("hidden")
+  let streamCountdown = document.querySelector("#countdown-timer")
+  streamCountdown.classList.add("hidden")
+  
+  let rouletteImage = document.querySelector(".roulette-img")
+  rouletteImage.classList.remove("hidden")
+  rouletteImage.classList.add("roulette-spinning")
+}
+
 const initGameSocketListener = () => {
   console.log("initGameSocketListener")
   const game = $("#game_id")
@@ -71,7 +81,8 @@ const initGameSocketListener = () => {
 
   console.log({gameId})
   if(gameId) {
-    let socket = new WebSocket(`wss://${window.location.host}/cable`);
+    let protocol = window.location.protocol == "https:" ? "wss:" : "ws:"
+    let socket = new WebSocket(`${protocol}//${window.location.host}/cable`);
     console.info('%cConnecting to Socket', 'color: blue');
 
     socket.onopen = async () => {
@@ -95,6 +106,12 @@ const initGameSocketListener = () => {
       if (msg.message?.type == 'GAME_UPDATED') {
         window.location.reload();
       }
+      
+      if (msg.message?.type == 'START_SPIN') {
+        // window.location.reload();
+        startSpin();
+      }
+      
       if (msg.message?.type == 'PLAYER_JOIN') {
         renderParticipantRow(msg.message.participants)
       }
