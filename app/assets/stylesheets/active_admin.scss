@@ -280,6 +280,18 @@ $side-by-side-filter-input-width: auto;
     }
     .stream-timer {
       flex: 1;
+      position: relative;
+      .roulette-img {
+        position: absolute;
+        top: 120px;
+        left: 40px;
+      }
+      .roulette-spinning {
+        animation-name: spin;
+        animation-duration: 27000ms;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in-out;
+      }
       .timer-label {
         margin-top: 243px;
         margin-left: 63px;
@@ -300,5 +312,18 @@ $side-by-side-filter-input-width: auto;
         font-style: italic;
       }
     }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(28800deg);
   }
 }
