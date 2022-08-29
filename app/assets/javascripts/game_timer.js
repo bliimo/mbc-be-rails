@@ -41,7 +41,8 @@ const renderParticipantRow = (participants) => {
 const initGameSocketListener = () => {
   const gameId = $("#game_id").val()
   if(gameId) {
-    let socket = new WebSocket(`wss://${window.location.host}/cable`);
+    let protocol = window.location.protocol == "https:" ? "wss:" : "ws:"
+    let socket = new WebSocket(`${protocol}//${window.location.host}/cable`);
     console.info('%cConnecting to Socket', 'color: blue');
 
     socket.onopen = async () => {
