@@ -48,11 +48,6 @@ ActiveAdmin.register Roulette do
       { type: 'START_SPIN' }
     )
 
-    GameChannel.broadcast_to(
-      resource,
-      { type: 'GAME_UPDATED' }
-    )
-
     Rails.logger.debug 'Setting countdown'
     time = Roulette.lobby_time - 5 + rand(0.0..5.0)
     Rails.logger.debug time.to_s
